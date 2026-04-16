@@ -2,6 +2,31 @@
 
 All notable changes to Access For Seniors will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Module count now consistently 28 across `SKILL.md`, `README.md`, `docs/`, `references/modules.md`, and `tests/manual-tests.md` (Aging-Services Navigation was added as Module 28 in 1.0.0 but several files still said 27).
+- `references/data-models.md` DynamoDB table name corrected from pre-rebrand `ConnectionOS` to `AccessForSeniors`.
+- `docs/installation.md` broken paths and clone URL (left over from the rename) fixed.
+- `docs/quick-start.md` removed stale "Enterprise" product name.
+- `scripts/validate.sh`: fixed format-string bug (`printf "$BROKEN"`) and a counter that only incremented once regardless of how many links were broken.
+
+### Added
+- Mermaid diagrams replacing ASCII across `README.md`, `conversation-engine.md`, `voice-interface.md` (sequence diagram), `memory-capture.md`, `alerts-system.md` (state diagram), `multi-tenant.md`, `cicd.md`, `analytics.md`, `billing.md`, `engagement-scoring.md`, `auth.md`, plus a new ER diagram in `data-models.md` and a module-grouping diagram in `modules.md`.
+- `docs/architecture.md` — contributor-facing system overview with request path, tenant isolation, and module→reference map.
+- `docs/glossary.md` — OAA/AAA/ADRC/LTSS/HCBS/PHI/BAA/SHIP/etc. plus voice guardrails.
+- `.github/ISSUE_TEMPLATE/` (bug, feature, reference update) and `.github/PULL_REQUEST_TEMPLATE.md` — fulfilling the reference in `CONTRIBUTING.md`.
+- `.github/workflows/validate.yml` — GitHub Actions workflow that runs `validate.sh` + `build-skill.sh` on push/PR and uploads the packaged skill.
+- `.gitignore` with `dist/` and `*.skill`.
+- Linkified primary-source URLs in `references/aging-services.md`.
+- Troubleshooting section in `docs/installation.md` keyed to real validator error strings; "First five minutes" tour in `docs/quick-start.md`.
+
+### Changed
+- `SKILL.md` description compressed from an 18-line trigger-phrase dump into a focused paragraph (better for skill selection).
+- `scripts/build-skill.sh` now validates before building, uses `mktemp -d`, guards on missing `zip`, and emits both `access-for-seniors.skill` and a version-stamped `access-for-seniors-<version>.skill` derived from `CHANGELOG.md`.
+- `scripts/validate.sh` now cross-checks links in every reference file, asserts the module count matches `references/modules.md`, and flags stray "27 modules" phrasing.
+- Removed committed build artifact `access-for-seniors.skill` from the repo root; `build-skill.sh` writes to `dist/`.
+
 ## [1.0.0] - 2026-04-15
 
 ### Rebranded from Connection OS Enterprise

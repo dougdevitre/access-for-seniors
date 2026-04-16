@@ -63,6 +63,23 @@ const tokenCache = {
 
 ## JWT Normalization
 
+```mermaid
+flowchart LR
+    ClerkUser["Staff / Family / Admin<br/>(web or mobile)"]
+    CognitoUser["Enterprise operator<br/>(SAML / OIDC)"]
+    Clerk["Clerk JWT"]
+    Cognito["Cognito JWT"]
+    Authorizer["API Gateway<br/>Lambda authorizer"]
+    Claims["NormalizedClaims<br/>userId · tenantId · role<br/>facilityIds · provider · email"]
+    API["Downstream Lambdas"]
+
+    ClerkUser --> Clerk
+    CognitoUser --> Cognito
+    Clerk --> Authorizer
+    Cognito --> Authorizer
+    Authorizer --> Claims --> API
+```
+
 API Gateway Lambda authorizer normalizes claims from both providers:
 
 ```typescript

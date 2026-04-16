@@ -5,6 +5,64 @@
 2. [Module 11–20: Enterprise & Infrastructure](#enterprise--infrastructure-modules-11-20)
 3. [Module 21–28: Advanced & Growth](#advanced--growth-modules-21-28)
 
+## Module map
+
+```mermaid
+flowchart TB
+    subgraph Core["Core Platform (1–10)"]
+        M1["1. Resident Onboarding"]
+        M2["2. AI Conversation Core"]
+        M3["3. Memory &amp; Context"]
+        M4["4. Engagement Scoring"]
+        M5["5. Alert Engine"]
+        M6["6. Caregiver Dashboard"]
+        M7["7. Family Mobile App"]
+        M8["8. Voice Interface"]
+        M9["9. Family Outreach"]
+        M10["10. Community Features"]
+    end
+
+    subgraph Platform["Enterprise &amp; Infrastructure (11–20)"]
+        M11["11. Notifications"]
+        M12["12. Analytics &amp; Reporting"]
+        M13["13. Multi-Tenant Core"]
+        M14["14. Auth &amp; SSO"]
+        M15["15. Billing &amp; Subscriptions"]
+        M16["16. AWS Infrastructure"]
+        M17["17. CI/CD"]
+        M18["18. Security &amp; Compliance"]
+        M19["19. Data Export &amp; Portability"]
+        M20["20. White-Label Config"]
+    end
+
+    subgraph Advanced["Advanced &amp; Growth (21–28)"]
+        M21["21. Enterprise Admin Portal"]
+        M22["22. API &amp; MCP Tools"]
+        M23["23. Integrations Hub"]
+        M24["24. Research &amp; Outcomes"]
+        M25["25. Training &amp; Certification"]
+        M26["26. Family Portal (Web)"]
+        M27["27. Predictive Wellness"]
+        M28["28. Aging-Services Navigation"]
+    end
+
+    M1 --> M2
+    M2 --> M3 --> M4 --> M5
+    M5 --> M6
+    M5 --> M7
+    M2 --> M8
+    M4 --> M9
+    M9 --> M11
+    M5 --> M11
+    M4 --> M12
+    M13 --> M14 --> M15
+    M13 --> M18
+    M5 --> M28
+    M27 --> M5
+    M7 --> M26
+    M22 --> M23
+```
+
 ---
 
 ## Core Platform Modules (1–10)
