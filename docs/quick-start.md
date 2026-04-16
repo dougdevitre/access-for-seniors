@@ -36,7 +36,7 @@ When installed, this skill guides Claude through any work related to Access For 
 ## What to Expect
 
 Claude will:
-- Reference specific modules by number (1–27)
+- Reference specific modules by number (1–28)
 - Use the canonical tech stack (React/Vite, Node/TS, DynamoDB, AWS Lambda, Claude API)
 - Apply HIPAA-aligned security defaults automatically
 - Frame engagement data as "connection signals" not diagnoses

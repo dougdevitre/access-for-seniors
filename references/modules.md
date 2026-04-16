@@ -3,7 +3,7 @@
 ## Table of Contents
 1. [Module 1–10: Core Platform](#core-platform-modules-1-10)
 2. [Module 11–20: Enterprise & Infrastructure](#enterprise--infrastructure-modules-11-20)
-3. [Module 21–27: Advanced & Growth](#advanced--growth-modules-21-27)
+3. [Module 21–28: Advanced & Growth](#advanced--growth-modules-21-28)
 
 ---
 
@@ -174,7 +174,7 @@
 
 ---
 
-## Advanced & Growth Modules (21–27)
+## Advanced & Growth Modules (21–28)
 
 ### Module 21: Enterprise Admin Portal
 - **Purpose:** Multi-site operator console for health systems and large organizations

@@ -43,7 +43,7 @@ cd access-for-seniors-enterprise
 
 Ask Claude something like:
 
-- "What are the 27 modules in Access For Seniors?"
+- "What are the 28 modules in Access For Seniors?"
 - "Show me the DynamoDB schema for Access For Seniors residents"
 - "Design a feature for Access For Seniors Module 5 Alert Engine"
 

@@ -47,19 +47,44 @@ if ! grep -q "^description:" SKILL.md; then
   ERRORS=$((ERRORS+1))
 fi
 
-# Check internal links in SKILL.md
-BROKEN=""
+# Check internal links in SKILL.md and all reference files
+BROKEN=()
 while read -r ref; do
   if [[ ! -f "$ref" ]]; then
-    BROKEN="${BROKEN}${ref}\n"
+    BROKEN+=("$ref (from SKILL.md)")
+    ERRORS=$((ERRORS+1))
   fi
 done < <(grep -oE 'references/[a-z-]+\.md' SKILL.md | sort -u)
 
-if [[ -n "$BROKEN" ]]; then
-  echo "FAIL: Broken references in SKILL.md:"
-  printf "$BROKEN"
+for refdoc in references/*.md; do
+  while read -r ref; do
+    target="references/$ref"
+    if [[ ! -f "$target" ]]; then
+      BROKEN+=("$target (from $refdoc)")
+      ERRORS=$((ERRORS+1))
+    fi
+  done < <(grep -oE '`[a-z-]+\.md`' "$refdoc" | tr -d '`' | sort -u)
+done
+
+if [[ ${#BROKEN[@]} -gt 0 ]]; then
+  echo "FAIL: Broken reference links:"
+  printf '  %s\n' "${BROKEN[@]}"
+fi
+
+# Module count consistency check
+MODULE_COUNT=$(grep -cE '^### Module [0-9]+:' references/modules.md)
+EXPECTED_COUNT=28
+if [[ "$MODULE_COUNT" -ne "$EXPECTED_COUNT" ]]; then
+  echo "FAIL: references/modules.md has $MODULE_COUNT modules, expected $EXPECTED_COUNT"
   ERRORS=$((ERRORS+1))
 fi
+
+for f in SKILL.md README.md docs/installation.md docs/quick-start.md tests/manual-tests.md; do
+  if [[ -f "$f" ]] && grep -qE '\b(1[–-]27|27 (enterprise |numbered |)modules|27 modules)\b' "$f"; then
+    echo "FAIL: $f references '27 modules' — should be $EXPECTED_COUNT"
+    ERRORS=$((ERRORS+1))
+  fi
+done
 
 if [[ $ERRORS -eq 0 ]]; then
   echo "PASS: All validations passed."

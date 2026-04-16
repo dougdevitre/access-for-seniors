@@ -12,7 +12,7 @@ description: >
   aging-services resource navigation (OAA programs, Medicare, Medicaid, AAA referrals).
   Always trigger when the user mentions Access For Seniors, access-for-seniors, senior-os,
   Access For Seniors (legacy name), senior connection platform, loneliness detection, caregiver
-  dashboard, aging-in-place tech, senior living SaaS, or any of the 27 enterprise modules
+  dashboard, aging-in-place tech, senior living SaaS, or any of the 28 enterprise modules
   by name or implication. Also trigger for product, engineering, compliance, or marketing
   work that references this platform even if not explicitly named. Trigger phrases include:
   "senior loneliness", "connection platform", "resident engagement", "family outreach",
@@ -95,7 +95,7 @@ values: equity, trauma-informed design, community-grounded, evidence-based.
 
 ## 3. Module Map
 
-Access For Seniors has 27 numbered enterprise modules plus named system components.
+Access For Seniors has 28 numbered enterprise modules plus named system components.
 For detailed specs on any module, read `references/modules.md`.
 
 **Named System Components:**
@@ -230,5 +230,5 @@ Load reference files on demand — don't load all at startup.
 | HIPAA, encryption, audit, compliance | `references/security.md` |
 | DynamoDB tables, RDS schemas, types | `references/data-models.md` |
 | Mobile app, React Native, Expo | `references/mobile-app.md` |
-| Module list, module specs (1–27) | `references/modules.md` |
+| Module list, module specs (1–28) | `references/modules.md` |
 | Positioning, ICP, messaging, GTM | `references/gtm.md` |
