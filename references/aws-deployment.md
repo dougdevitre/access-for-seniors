@@ -13,6 +13,29 @@ lib/
 └── pipeline-stack.ts     # CodePipeline (optional; prefer GitHub Actions)
 ```
 
+### Stack dependencies
+
+```mermaid
+flowchart TD
+    Data["data-stack<br/>DynamoDB · Aurora"]
+    Storage["storage-stack<br/>S3"]
+    Auth["auth-stack<br/>Cognito"]
+    Messaging["messaging-stack<br/>SES · SNS · Pinpoint"]
+    API["api-stack<br/>API Gateway + Lambda"]
+    Monitoring["monitoring-stack<br/>CloudWatch"]
+    Pipeline["pipeline-stack<br/>(optional)"]
+
+    API --> Data
+    API --> Storage
+    API --> Auth
+    API --> Messaging
+    Monitoring --> API
+    Monitoring --> Data
+    Pipeline --> API
+```
+
+Deploy `data-stack`, `storage-stack`, `auth-stack`, and `messaging-stack` before `api-stack` — CDK will refuse to deploy a dependent stack if its prerequisites are not satisfied. `monitoring-stack` and `pipeline-stack` are deployed last.
+
 ## Environments
 
 | Env | AWS Account | Purpose |

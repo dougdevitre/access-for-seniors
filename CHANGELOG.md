@@ -4,6 +4,16 @@ All notable changes to Access For Seniors will be documented in this file.
 
 ## [Unreleased]
 
+### Added (second iteration)
+- `tests/content-checks.sh` — 29 automated grep assertions covering the module catalogue, data model invariants, engagement scoring zones, HIPAA-aligned retention defaults, tech-stack anchors, MCP tool surface, and aging-services citations. Wired into the CI workflow so regressions get caught on PR.
+- `docs/README.md` — landing page for the docs folder with a reading-map mermaid and tips.
+- `references/mcp-tools.md` — end-to-end example showing a `get_resident` call and response envelope, an error envelope, and a note on cross-tenant safety; plus a call-sequence mermaid of the MCP → authorizer → API → DDB path.
+- `references/aws-deployment.md` — CDK stack dependency mermaid and deploy-order guidance.
+- Note at the top of `tests/manual-tests.md` pointing at the automated version as the source of truth.
+
+### Changed (second iteration)
+- `.github/workflows/validate.yml` — now runs `tests/content-checks.sh` after validation; build step uses `--skip-validate` since validation already ran.
+
 ### Fixed
 - Module count now consistently 28 across `SKILL.md`, `README.md`, `docs/`, `references/modules.md`, and `tests/manual-tests.md` (Aging-Services Navigation was added as Module 28 in 1.0.0 but several files still said 27).
 - `references/data-models.md` DynamoDB table name corrected from pre-rebrand `ConnectionOS` to `AccessForSeniors`.

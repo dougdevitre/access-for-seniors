@@ -2,6 +2,8 @@
 
 Manual test cases to verify the skill is working correctly after installation or updates.
 
+> **Most content assertions on this page are also enforced automatically by `tests/content-checks.sh`** — run it before pushing, and CI runs it on every PR. The manual prompts below test behavior (how Claude responds), which can't be easily automated.
+
 ## Trigger Tests (does the skill activate?)
 
 | # | Prompt | Expected |
