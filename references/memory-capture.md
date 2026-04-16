@@ -11,19 +11,20 @@
 
 ## Extraction Pipeline
 
-```
-Conversation ends
-    ↓
-Post-conversation Lambda triggered
-    ↓
-Claude extracts memory candidates (structured JSON)
-    ↓
-Dedup against existing memories (semantic similarity)
-    ↓
-Store new/updated items in DynamoDB (RESIDENT#{id} / MEM#{memId})
-    ↓
-Episodic items: set TTL (90 days default)
-Biographical/Preference/Relational: no TTL
+```mermaid
+flowchart TD
+    End["Conversation ends"]
+    Lambda["Post-conversation Lambda"]
+    Extract["Claude extracts<br/>memory candidates (JSON)"]
+    Dedup["Dedup vs existing<br/>(semantic similarity)"]
+    Store["Store in DynamoDB<br/>RESIDENT#id / MEM#memId"]
+    TTL{"Memory type?"}
+    Episodic["Episodic<br/>TTL 90 days"]
+    Stable["Biographical / Preference / Relational<br/>no TTL"]
+
+    End --> Lambda --> Extract --> Dedup --> Store --> TTL
+    TTL -->|episodic| Episodic
+    TTL -->|other| Stable
 ```
 
 ## Extraction Prompt

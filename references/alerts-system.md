@@ -20,9 +20,16 @@
 
 ## Alert Lifecycle
 
-```
-TRIGGERED → OPEN → ACKNOWLEDGED → RESOLVED
-                 → ESCALATED (if not acknowledged within target)
+```mermaid
+stateDiagram-v2
+    [*] --> Triggered
+    Triggered --> Open: routed to recipients
+    Open --> Acknowledged: caregiver acks
+    Open --> Escalated: no ack within target
+    Acknowledged --> Resolved: caregiver closes with note
+    Escalated --> Acknowledged: higher tier acks
+    Escalated --> Resolved
+    Resolved --> [*]
 ```
 
 ## Auto-Escalation

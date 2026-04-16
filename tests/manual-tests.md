@@ -15,7 +15,7 @@ Manual test cases to verify the skill is working correctly after installation or
 
 | # | Prompt | Expected Content |
 |---|--------|-----------------|
-| 5 | "What are the 27 modules?" | Lists all 27 from `references/modules.md` |
+| 5 | "What are the 28 modules?" | Lists all 28 from `references/modules.md` |
 | 6 | "What's the default retention for conversations?" | 7 years (from `security.md`) |
 | 7 | "What tech stack do we use for mobile?" | React Native + Expo + Clerk (from `mobile-app.md`) |
 | 8 | "What are the engagement zones?" | Green 70+, Yellow 40–69, Red <40 |

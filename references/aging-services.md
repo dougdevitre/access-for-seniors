@@ -132,10 +132,15 @@ When a resident or family member expresses a need, the Access For Seniors assist
 
 ## Primary Sources
 
-- **ACL (Administration for Community Living):** acl.gov
-- **Medicare.gov:** medicare.gov
-- **CMS (Medicaid):** cms.gov
-- **Eldercare Locator:** eldercare.acl.gov — 1-800-677-1116
-- **Family Caregiver Alliance:** caregiver.org
-- **National Council on Aging:** ncoa.org
-- **Missouri DHSS:** health.mo.gov
+- **ACL (Administration for Community Living):** [acl.gov](https://acl.gov)
+- **Medicare.gov:** [medicare.gov](https://medicare.gov)
+- **CMS (Medicaid):** [cms.gov](https://cms.gov) · [medicaid.gov](https://medicaid.gov)
+- **Eldercare Locator:** [eldercare.acl.gov](https://eldercare.acl.gov) — 1-800-677-1116
+- **SHIP (State Health Insurance Assistance):** [shiphelp.org](https://shiphelp.org)
+- **Family Caregiver Alliance:** [caregiver.org](https://caregiver.org)
+- **ARCH National Respite Network:** [archrespite.org](https://archrespite.org)
+- **National Council on Aging:** [ncoa.org](https://ncoa.org)
+- **Meals on Wheels America:** [mealsonwheelsamerica.org](https://mealsonwheelsamerica.org)
+- **988 Suicide & Crisis Lifeline:** [988lifeline.org](https://988lifeline.org) — call or text 988
+- **Missouri DHSS:** [health.mo.gov](https://health.mo.gov)
+- **CLAIM (Missouri SHIP):** [claimmo.org](https://claimmo.org)

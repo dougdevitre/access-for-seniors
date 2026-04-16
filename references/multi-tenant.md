@@ -12,25 +12,38 @@
 
 ## Tenant Provisioning Flow
 
-```
-1. Enterprise signs contract
-2. POST /internal/tenants → creates:
-   - DynamoDB tenant record
-   - Stripe customer + subscription
-   - Cognito user pool (enterprise) or tenant config (shared)
-   - S3 prefix + lifecycle rules
-   - Default tenant config (alerts, notifications, branding)
-3. Admin receives setup link → configures branding, invites first users
-4. First resident added → consent captured → AI features activated
+```mermaid
+flowchart TD
+    Contract["Enterprise signs contract"]
+    Create["POST /internal/tenants"]
+    Dynamo["DynamoDB tenant record"]
+    Stripe["Stripe customer + subscription"]
+    Cognito["Cognito pool (enterprise)<br/>or shared pool config"]
+    S3["S3 prefix + lifecycle rules"]
+    Config["Default tenant config<br/>alerts · notifications · branding"]
+    Admin["Admin setup link<br/>→ branding, invite users"]
+    Resident["First resident added<br/>→ consent captured"]
+    Active["AI features activated"]
+
+    Contract --> Create
+    Create --> Dynamo & Stripe & Cognito & S3 & Config
+    Dynamo --> Admin
+    Admin --> Resident --> Active
 ```
 
 ## Tenant Hierarchy
 
-```
-Organization (enterprise)
-  └── Region (optional grouping)
-        └── Facility (tenant)
-              └── Residents, Caregivers, Family
+```mermaid
+flowchart TD
+    Org["Organization<br/>(enterprise)"]
+    Region["Region<br/>(optional grouping)"]
+    Facility["Facility<br/>(tenant)"]
+    Residents["Residents"]
+    Caregivers["Caregivers"]
+    Family["Family"]
+
+    Org --> Region --> Facility
+    Facility --> Residents & Caregivers & Family
 ```
 
 - Single-facility tenants: Organization = Facility

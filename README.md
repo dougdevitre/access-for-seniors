@@ -5,6 +5,22 @@
 
 Access For Seniors helps senior living communities, home health agencies, health systems, and AAAs detect isolation early, keep families connected, and route older adults to the programs and benefits they've earned.
 
+## Contents
+
+- [The Access To Family](#the-access-to-family)
+- [What It Does](#what-it-does)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [28 Modules](#28-modules)
+- [Who It Serves](#who-it-serves)
+- [Using as a Claude Skill](#using-as-a-claude-skill)
+- [Quick Start](#quick-start)
+- [Security & Compliance](#security--compliance)
+- [Brand Voice](#brand-voice)
+- [Contributing](#contributing)
+- [Contact](#contact)
+- [License](#license)
+
 ## The Access To Family
 
 | Project | Focus |
@@ -32,13 +48,34 @@ Access For Seniors helps senior living communities, home health agencies, health
 
 ## Architecture
 
-```
-Senior (Voice/Text) → Conversation Engine (Claude API) → Memory Capture → Engagement Scoring
-                                                                              ↓
-Family (Mobile App) ← Outreach Messages ← Message Generator        Alert Engine → Caregiver Dashboard
-                                                                              ↓
-                                                                   Aging-Services Navigation
-                                                                   (OAA / Medicare / AAA / etc.)
+```mermaid
+flowchart LR
+    Senior["👤 Senior<br/>(Voice / Text)"]
+    ConvEngine["Conversation Engine<br/>(Claude API)"]
+    Memory["Memory Capture"]
+    Scoring["Engagement Scoring"]
+    MsgGen["Message Generator"]
+    Family["👪 Family<br/>(Mobile App)"]
+    Alerts["Alert Engine"]
+    Dashboard["🖥️ Caregiver Dashboard"]
+    Services["Aging-Services Navigation<br/>OAA · Medicare · AAA · Meals on Wheels"]
+
+    Senior <--> ConvEngine
+    ConvEngine --> Memory
+    Memory --> Scoring
+    Scoring --> Alerts
+    Scoring --> MsgGen
+    MsgGen --> Family
+    Alerts --> Dashboard
+    Alerts --> Services
+    Dashboard --> Services
+
+    classDef person fill:#fef3c7,stroke:#b45309,color:#1f2937;
+    classDef system fill:#e0e7ff,stroke:#4338ca,color:#1e1b4b;
+    classDef surface fill:#d1fae5,stroke:#047857,color:#064e3b;
+    class Senior,Family person;
+    class ConvEngine,Memory,Scoring,MsgGen,Alerts system;
+    class Dashboard,Services surface;
 ```
 
 ## Tech Stack
@@ -72,6 +109,17 @@ Family (Mobile App) ← Outreach Messages ← Message Generator        Alert Eng
 | 9 | Family Outreach | 19 | Data Export & Portability | | |
 | 10 | Community Features | 20 | White-Label Config | | |
 
+## Who It Serves
+
+| Role | Primary Interface | Key Need |
+|------|-------------------|----------|
+| Senior / Resident | Voice + Mobile | Natural, low-friction conversation and service connection |
+| Family Member | Mobile + Web | Peace of mind, connection reminders, coordination |
+| Caregiver / Staff | Dashboard | Alerts, notes, resident context, resource referrals |
+| Facility Admin | Admin Portal | Tenant config, billing, reporting |
+| Enterprise Operator | API + Admin | Multi-site management, analytics |
+| AAA / Community Worker | Navigator Portal | Referral tracking, eligibility screening |
+
 ## Using as a Claude Skill
 
 This repo is structured as a Claude skill. Install the `.skill` package or point your Claude skill directory to this repo.
@@ -100,6 +148,22 @@ access-for-seniors/
 └── scripts/                          ← Build and packaging scripts
 ```
 
+## Quick Start
+
+```bash
+git clone https://github.com/dougdevitre/access-for-seniors.git
+cd access-for-seniors
+./scripts/validate.sh          # verify the skill is structurally valid
+./scripts/build-skill.sh       # build dist/access-for-seniors.skill
+```
+
+Then:
+
+- **As a Claude skill:** upload `dist/access-for-seniors.skill` in Claude settings → Capabilities → Skills
+- **For development:** see [`docs/installation.md`](docs/installation.md) and [`docs/quick-start.md`](docs/quick-start.md)
+- **Contributor architecture overview:** [`docs/architecture.md`](docs/architecture.md)
+- **Domain glossary (OAA, AAA, HCBS, etc.):** [`docs/glossary.md`](docs/glossary.md)
+
 ## Security & Compliance
 
 - HIPAA-aligned defaults (encryption, audit logging, tenant isolation, BAAs)
@@ -112,6 +176,10 @@ access-for-seniors/
 ## Brand Voice
 
 Calm, professional, empathetic. Practical over poetic. No hype. No fear-based messaging. Person-first language ("older adult" not "elderly"). Plain over bureaucratic ("help with meals" not "Title III-C nutrition services" — unless the program uses that term).
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). PRs welcome — please run `./scripts/validate.sh` before opening one. Issue and pull request templates live under `.github/`.
 
 ## Contact
 

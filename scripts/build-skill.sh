@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Build a .skill package from the repo root
-# Usage: ./scripts/build-skill.sh
+# Usage: ./scripts/build-skill.sh [--skip-validate]
+#
+# Produces:
+#   dist/access-for-seniors.skill          — latest build (stable filename)
+#   dist/access-for-seniors-<version>.skill — version-stamped copy, where
+#                                             version is read from CHANGELOG.md
 
 set -euo pipefail
 
@@ -9,29 +14,52 @@ cd "$REPO_ROOT"
 
 SKILL_NAME="access-for-seniors"
 OUTPUT_DIR="dist"
-OUTPUT_FILE="${OUTPUT_DIR}/${SKILL_NAME}.skill"
-STAGING_DIR="/tmp/${SKILL_NAME}-staging"
 
-echo "Building Access For Seniors skill package..."
+# --- Pre-flight checks -----------------------------------------------------
 
-# Clean staging
-rm -rf "$STAGING_DIR"
+if ! command -v zip >/dev/null 2>&1; then
+  echo "ERROR: 'zip' is not installed. Install it first (e.g. apt install zip / brew install zip)." >&2
+  exit 1
+fi
+
+# Skip validate only if explicitly opted out — broken packages are not worth shipping.
+if [[ "${1:-}" != "--skip-validate" ]]; then
+  echo "Validating skill before build..."
+  if ! bash "$REPO_ROOT/scripts/validate.sh"; then
+    echo "ERROR: validation failed; aborting build. Re-run with --skip-validate to bypass." >&2
+    exit 1
+  fi
+fi
+
+# Extract version from the first [X.Y.Z] header in CHANGELOG.md; fall back to "dev".
+VERSION="$(grep -oE '^## \[[0-9]+\.[0-9]+\.[0-9]+\]' CHANGELOG.md 2>/dev/null \
+          | head -1 \
+          | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\]/\1/')"
+VERSION="${VERSION:-dev}"
+
+# --- Stage and package -----------------------------------------------------
+
+# mktemp avoids collisions between concurrent builds / multi-user hosts.
+STAGING_DIR="$(mktemp -d -t "${SKILL_NAME}-build.XXXXXX")"
+trap 'rm -rf "$STAGING_DIR"' EXIT
+
+echo "Building Access For Seniors skill package (version: $VERSION)..."
+
 mkdir -p "$STAGING_DIR/$SKILL_NAME"
 
-# Copy skill content
+# Skill payload: SKILL.md + references/ only. docs/, tests/, scripts/ are
+# contributor assets, not part of the runtime skill.
 cp SKILL.md "$STAGING_DIR/$SKILL_NAME/"
 cp -r references "$STAGING_DIR/$SKILL_NAME/"
 
-# Create output dir
 mkdir -p "$OUTPUT_DIR"
 
-# Package as zip (.skill is a zip file)
-cd "$STAGING_DIR"
-zip -r "$REPO_ROOT/$OUTPUT_FILE" "$SKILL_NAME" -x "*.DS_Store"
+STABLE_FILE="$OUTPUT_DIR/${SKILL_NAME}.skill"
+VERSIONED_FILE="$OUTPUT_DIR/${SKILL_NAME}-${VERSION}.skill"
 
-cd "$REPO_ROOT"
-echo "Built: $OUTPUT_FILE"
-ls -lh "$OUTPUT_FILE"
+# -q keeps output tidy; -X strips extra attributes that differ between hosts.
+( cd "$STAGING_DIR" && zip -qrX "$REPO_ROOT/$STABLE_FILE" "$SKILL_NAME" -x "*.DS_Store" )
+cp "$STABLE_FILE" "$VERSIONED_FILE"
 
-# Cleanup staging
-rm -rf "$STAGING_DIR"
+echo "Built:"
+ls -lh "$STABLE_FILE" "$VERSIONED_FILE"

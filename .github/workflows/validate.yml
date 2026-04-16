@@ -1,0 +1,26 @@
+name: Validate Skill
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run skill validation
+        run: bash scripts/validate.sh
+
+      - name: Build skill package
+        run: bash scripts/build-skill.sh
+
+      - name: Upload skill artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: access-for-seniors-skill
+          path: dist/access-for-seniors.skill
+          if-no-files-found: error

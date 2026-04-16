@@ -10,6 +10,52 @@ connection — and surfaces **connection signals** to caregivers and families.
 - SAY: "reduced engagement", "connection signals", "engagement trend"
 - NEVER SAY: "lonely", "isolated", "depressed", "diagnosed", "suffering from"
 
+## How it fits together
+
+```mermaid
+flowchart LR
+    subgraph Signals["Signal sources"]
+        ConvFreq["Conversation frequency<br/>20%"]
+        ConvQual["Conversation quality<br/>25%"]
+        Activity["Activity participation<br/>15%"]
+        Family["Family contact<br/>15%"]
+        Observation["Caregiver observation<br/>15%"]
+        SelfReport["Self-reported<br/>10%"]
+    end
+
+    Score["Engagement score<br/>0–100"]
+
+    Green(["Green<br/>70–100"])
+    Yellow(["Yellow<br/>40–69"])
+    Red(["Red<br/>0–39"])
+
+    Anomaly["Anomaly detection<br/>sudden drop · missed streak · cliff"]
+    Trend["Trend detection<br/>7d vs 30d rolling avg"]
+
+    Tier1["Tier 1 alert"]
+    Tier2["Tier 2 alert"]
+    Tier3["Tier 3 alert"]
+
+    Signals --> Score
+    Score --> Green
+    Score --> Yellow
+    Score --> Red
+    Score --> Anomaly
+    Score --> Trend
+
+    Yellow -.->|48h review| Tier1
+    Red --> Tier1
+    Anomaly -->|sudden drop| Tier2
+    Anomaly -->|engagement cliff| Tier3
+
+    classDef green fill:#d1fae5,stroke:#047857,color:#064e3b;
+    classDef yellow fill:#fef3c7,stroke:#b45309,color:#78350f;
+    classDef red fill:#fecaca,stroke:#b91c1c,color:#7f1d1d;
+    class Green green;
+    class Yellow yellow;
+    class Red red;
+```
+
 ## Signal Sources
 
 | Source | Weight | Update Frequency | Collection Method |
