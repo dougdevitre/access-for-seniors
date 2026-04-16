@@ -1,8 +1,26 @@
 # Access For Seniors — Data Models
 
+## Entity Relationships
+
+```mermaid
+erDiagram
+    TENANT ||--o{ RESIDENT : contains
+    TENANT ||--o{ CAREGIVER : employs
+    TENANT ||--o{ ALERT : raises
+    TENANT ||--|| CONFIG : has
+    RESIDENT ||--o{ CONVERSATION : has
+    RESIDENT ||--o{ MEMORY_ITEM : has
+    RESIDENT ||--o{ ALERT : about
+    RESIDENT ||--o{ FAMILY_MEMBER : linked_to
+    RESIDENT ||--o{ CONSENT : captured_for
+    CAREGIVER }o--o{ RESIDENT : assigned_to
+    CONVERSATION ||--o{ MEMORY_ITEM : yields
+    ALERT ||--o{ NOTIFICATION : triggers
+```
+
 ## DynamoDB: Single-Table Design
 
-**Table name:** `ConnectionOS`
+**Table name:** `AccessForSeniors`
 
 ### Access Patterns & Key Design
 

@@ -2,26 +2,22 @@
 
 ## GitHub Actions Pipeline
 
-```
-PR opened/updated
-    ↓
-lint + typecheck + unit tests (parallel)
-    ↓
-PR merged to main
-    ↓
-CDK diff (staging)
-    ↓
-CDK deploy (staging)
-    ↓
-Integration tests (staging)
-    ↓
-Manual approval (Slack notification)
-    ↓
-CDK deploy (prod)
-    ↓
-Smoke tests (prod)
-    ↓
-Post-deploy notification (Slack)
+```mermaid
+flowchart TD
+    PR["PR opened / updated"]
+    Checks["lint · typecheck · unit tests<br/>(parallel)"]
+    Merge["PR merged to main"]
+    Diff["CDK diff (staging)"]
+    DeployStaging["CDK deploy (staging)"]
+    Integration["Integration tests (staging)"]
+    Approval{"Manual approval<br/>(Slack)"}
+    DeployProd["CDK deploy (prod)"]
+    Smoke["Smoke tests (prod)"]
+    Notify["Post-deploy Slack notification"]
+
+    PR --> Checks --> Merge --> Diff --> DeployStaging --> Integration --> Approval
+    Approval -->|approved| DeployProd --> Smoke --> Notify
+    Approval -->|rejected| PR
 ```
 
 ## Workflow Files

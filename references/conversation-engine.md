@@ -2,32 +2,38 @@
 
 ## Architecture
 
-```
-Resident Input (text/voice)
-    ↓
-[Input Sanitization] — strip injection attempts, normalize
-    ↓
-[Context Assembly]
-    ├── System Prompt (persona + safety rules)
-    ├── Memory Items (biographical, preference, episodic, relational)
-    ├── Conversation History (last N turns, configurable)
-    └── Tenant Config (persona name, tone preferences)
-    ↓
-[Claude API Call] — model: claude-sonnet-4-20250514 (default) or claude-opus-4-6 (deep engagement)
-    ↓
-[Output Safety Filter]
-    ├── Content filter (no medical/legal advice, no harmful content)
-    ├── Distress detection (keywords + sentiment → alert if triggered)
-    └── Diagnosis language filter (no clinical terms)
-    ↓
-[Response Delivery] — text or TTS
-    ↓
-[Post-Conversation Processing]
-    ├── Memory extraction (new memory items)
-    ├── Topic tagging
-    ├── Sentiment classification
-    ├── Engagement signal update
-    └── Conversation log to S3 (encrypted)
+```mermaid
+flowchart TD
+    Input["Resident Input<br/>(text / voice)"]
+    Sanitize["Input Sanitization<br/>strip injection, normalize"]
+
+    subgraph Assembly["Context Assembly"]
+        SysPrompt["System Prompt<br/>persona + safety rules"]
+        Memory["Memory Items<br/>biographical · preference<br/>episodic · relational"]
+        History["Conversation History<br/>last N turns"]
+        Tenant["Tenant Config<br/>persona · tone"]
+    end
+
+    Claude["Claude API<br/>sonnet (default)<br/>opus (deep engagement)"]
+
+    subgraph Safety["Output Safety Filter"]
+        Content["Content filter<br/>no medical/legal advice"]
+        Distress["Distress detection<br/>keywords + sentiment"]
+        Diagnosis["No-diagnosis filter"]
+    end
+
+    Deliver["Response Delivery<br/>text or TTS"]
+
+    subgraph Post["Post-Conversation Processing"]
+        Extract["Memory extraction"]
+        Topics["Topic tagging"]
+        Sentiment["Sentiment classification"]
+        Engagement["Engagement signal update"]
+        Log["Conversation log<br/>encrypted in S3"]
+    end
+
+    Input --> Sanitize --> Assembly --> Claude --> Safety --> Deliver --> Post
+    Distress -. "triggers" .-> Alert["Caregiver Alert"]
 ```
 
 ## System Prompt Structure

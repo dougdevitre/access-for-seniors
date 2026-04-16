@@ -10,11 +10,17 @@
 
 ## Stripe Object Mapping
 
-```
-Stripe Customer (1:1 with Tenant)
-  └── Subscription
-        ├── Price (recurring: per-resident or flat)
-        └── Usage Records (metered: API calls, voice minutes, storage)
+```mermaid
+flowchart TD
+    Tenant["Tenant"]
+    Customer["Stripe Customer<br/>(1:1 with Tenant)"]
+    Subscription["Subscription"]
+    Price["Price<br/>per-resident or flat"]
+    Usage["Usage Records<br/>API · voice minutes · storage"]
+
+    Tenant --> Customer --> Subscription
+    Subscription --> Price
+    Subscription --> Usage
 ```
 
 ## Webhook Events

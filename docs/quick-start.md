@@ -2,7 +2,32 @@
 
 ## What This Skill Does
 
-When installed, this skill guides Claude through any work related to Access For Seniors Enterprise — a multi-tenant SaaS platform for AI-powered senior connection and loneliness mitigation.
+When installed, this skill guides Claude through any work related to Access For Seniors — a multi-tenant SaaS platform for AI-powered senior connection and loneliness mitigation.
+
+## First five minutes
+
+1. **Install the skill.** See [installation.md](installation.md).
+2. **Smoke test.** Ask Claude: *"What is Access For Seniors?"* You should get a description that mentions the 28 modules and the "Access To" family, not a generic answer.
+3. **Verify module knowledge.** Ask: *"Name all 28 modules."* Claude should list them from `references/modules.md`.
+4. **Try a real task.** Pick an [example prompt](#example-prompts) that matches what you actually need — a spec, an API route, an outreach message, a compliance question.
+5. **If something looks off,** run `./scripts/validate.sh`. See the [installation troubleshooting section](installation.md#troubleshooting) if it fails.
+
+## How the skill works (briefly)
+
+```mermaid
+flowchart LR
+    Prompt["Your prompt"]
+    Skill["SKILL.md<br/>(always loaded)"]
+    Ref["references/*.md<br/>(loaded on demand)"]
+    Response["Claude response"]
+
+    Prompt --> Skill
+    Skill -. "loads relevant file" .-> Ref
+    Ref --> Response
+    Skill --> Response
+```
+
+`SKILL.md` is always available to Claude. Reference files are only pulled in when you ask about a topic that maps to one (see `SKILL.md` §7 for the mapping). That's why focused prompts work better than vague ones.
 
 ## Example Prompts
 
@@ -51,3 +76,10 @@ Update a reference file when:
 - GTM positioning or messaging evolves
 
 After updates, run `./scripts/validate.sh` to confirm the skill structure is intact.
+
+## Where to go next
+
+- **Contributor architecture overview:** [architecture.md](architecture.md)
+- **Domain terms (OAA, AAA, HCBS, PHI, …):** [glossary.md](glossary.md)
+- **Module specs:** [`references/modules.md`](../references/modules.md)
+- **Test prompts to run after edits:** [`tests/manual-tests.md`](../tests/manual-tests.md)

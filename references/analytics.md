@@ -2,8 +2,15 @@
 
 ## Data Pipeline
 
-```
-DynamoDB Streams → Lambda (transform) → RDS Aurora (analytics warehouse)
+```mermaid
+flowchart LR
+    DDB["DynamoDB<br/>(operational)"]
+    Streams["DynamoDB Streams"]
+    Lambda["Lambda<br/>transform"]
+    Aurora["RDS Aurora<br/>(analytics warehouse)"]
+    BI["BI / Reports"]
+
+    DDB --> Streams --> Lambda --> Aurora --> BI
 ```
 
 ## Report Types

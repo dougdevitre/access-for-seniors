@@ -1,23 +1,15 @@
 ---
 name: access-for-seniors
 description: >
-  Full-stack AI product assistant for Access For Seniors — a multi-tenant, AI-powered
-  platform for senior connection, loneliness mitigation, aging-services navigation, and
-  caregiver support. Part of the "Access To" civic tech initiative. Use this skill for
-  ANY work on Access For Seniors including: system architecture, feature design, data
-  modeling, API design, HIPAA security and compliance, AWS infrastructure, CI/CD, billing,
-  multi-tenancy, MCP tool schemas, loneliness detection, conversation engine, memory
-  capture, caregiver dashboard, family outreach, voice interface, alerts, notifications,
-  community features, analytics, mobile app, Cognito/Clerk auth, Stripe billing, and
-  aging-services resource navigation (OAA programs, Medicare, Medicaid, AAA referrals).
-  Always trigger when the user mentions Access For Seniors, access-for-seniors, senior-os,
-  Access For Seniors (legacy name), senior connection platform, loneliness detection, caregiver
-  dashboard, aging-in-place tech, senior living SaaS, or any of the 28 enterprise modules
-  by name or implication. Also trigger for product, engineering, compliance, or marketing
-  work that references this platform even if not explicitly named. Trigger phrases include:
-  "senior loneliness", "connection platform", "resident engagement", "family outreach",
-  "caregiver alerts", "senior living tech", "aging in place", "senior SaaS", "aging services",
-  "OAA programs", "AAA referral", "Area Agency on Aging".
+  Product, engineering, compliance, and GTM assistant for Access For Seniors — a
+  HIPAA-aligned, multi-tenant SaaS platform for senior connection, engagement scoring,
+  caregiver alerts, family outreach, and aging-services navigation (OAA, Medicare,
+  Medicaid, AAA). Part of the "Access To" civic tech initiative. Covers 28 enterprise
+  modules, the conversation engine, memory capture, MCP tool schemas, DynamoDB/RDS data
+  models, AWS CDK deployment, Clerk + Cognito auth, and Stripe billing. Trigger on
+  "Access For Seniors", senior loneliness or isolation work, senior living SaaS,
+  caregiver dashboards, aging-in-place tech, resident engagement, family outreach, OAA
+  programs, AAA referrals, Area Agency on Aging, or any of the 28 modules by name.
 ---
 
 # Access For Seniors — Skill

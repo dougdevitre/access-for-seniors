@@ -2,23 +2,36 @@
 
 ## Architecture
 
-```
-Resident dials facility number or dedicated Access For Seniors number
-    ↓
-Twilio Voice receives call → webhook to API Gateway
-    ↓
-Lambda: greeting TTS (ElevenLabs) → "Hi {residentName}, it's {personaName}!"
-    ↓
-Loop:
-  Resident speaks → Twilio streams audio → ElevenLabs STT → text
-      ↓
-  Text → Claude API (with conversation engine context)
-      ↓
-  Claude response → ElevenLabs TTS → audio stream back to Twilio
-      ↓
-  Play audio to resident
-    ↓
-Call ends → post-conversation processing (memory extraction, scoring, logging)
+```mermaid
+sequenceDiagram
+    actor R as Resident
+    participant T as Twilio Voice
+    participant L as Voice Lambda
+    participant STT as ElevenLabs STT
+    participant C as Claude API
+    participant TTS as ElevenLabs TTS
+    participant P as Post-Processing
+
+    R->>T: dials facility / AFS number
+    T->>L: webhook (API Gateway)
+    L->>TTS: greeting prompt
+    TTS-->>T: greeting audio
+    T-->>R: "Hi {resident}, it's {persona}!"
+
+    loop Each turn
+        R->>T: speaks
+        T->>STT: stream audio
+        STT->>L: transcript
+        L->>C: prompt + conversation context
+        C-->>L: response text
+        L->>TTS: synthesize
+        TTS-->>T: audio stream
+        T-->>R: persona reply
+    end
+
+    R->>T: hangs up
+    T->>P: call ended event
+    P->>P: memory extraction, scoring, logging
 ```
 
 ## Voice Persona
