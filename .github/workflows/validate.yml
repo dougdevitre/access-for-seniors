@@ -15,8 +15,11 @@ jobs:
       - name: Run skill validation
         run: bash scripts/validate.sh
 
+      - name: Run content assertion tests
+        run: bash tests/content-checks.sh
+
       - name: Build skill package
-        run: bash scripts/build-skill.sh
+        run: bash scripts/build-skill.sh --skip-validate
 
       - name: Upload skill artifact
         uses: actions/upload-artifact@v4
