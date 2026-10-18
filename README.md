@@ -1,7 +1,7 @@
 # Access For Seniors
 
 > AI-powered platform for senior connection, loneliness mitigation, and aging-services navigation.
-> Part of the **[Access To](https://dougdevitre.github.io/access-projects)** civic tech initiative.
+> Part of **[Access To](https://dougdevitre.org)** — open-source tools for the access gaps that matter most. [See all projects →](https://dougdevitre.org/#pillars)
 
 Access For Seniors helps senior living communities, home health agencies, health systems, and AAAs detect isolation early, keep families connected, and route older adults to the programs and benefits they've earned.
 
