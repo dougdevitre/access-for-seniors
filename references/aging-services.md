@@ -1,5 +1,7 @@
 # Access For Seniors — Aging Services Navigation
 
+> Last verified: 2026-10-18 against official sources (CMS, ACL, Missouri DHSS/DSS). Figures change each January; confirm before sharing.
+
 ## Philosophy
 
 Access For Seniors connects older adults and their families to aging-services programs
@@ -27,10 +29,10 @@ The goal: reduce friction between a need and the program that meets it.
 
 ### Medicare — medicare.gov
 
-| Part | Coverage | Cost (2025 est.) |
+| Part | Coverage | Cost (2026) |
 |------|----------|------------------|
-| Part A | Hospital, skilled nursing (short-term), hospice, some home health | Usually premium-free |
-| Part B | Doctor visits, outpatient, preventive, DME | ~$185/month (income-adjusted) |
+| Part A | Hospital, skilled nursing (short-term), hospice, some home health | Usually premium-free; $1,736 inpatient deductible per benefit period |
+| Part B | Doctor visits, outpatient, preventive, DME | $202.90/month standard (higher at higher incomes); $283 yearly deductible |
 | Part C | Medicare Advantage (alternative to A+B, often includes dental/vision/Rx) | Varies |
 | Part D | Prescription drugs | Varies |
 | Medigap | Supplement to fill Original Medicare gaps | Varies |
@@ -54,7 +56,7 @@ The goal: reduce friction between a need and the program that meets it.
 
 ### Area Agencies on Aging (AAA)
 - Local hubs for aging services
-- **Find your AAA:** Eldercare Locator — 1-800-677-1116 — eldercare.acl.gov
+- **Find your AAA:** Eldercare Locator — 1-800-677-1116 (Mon–Fri, 8am–9pm ET) — eldercare.acl.gov
 - AAAs coordinate OAA programs, caregiver support, benefits counseling
 
 ### Aging and Disability Resource Centers (ADRC)
@@ -104,7 +106,8 @@ The goal: reduce friction between a need and the program that meets it.
 
 | Situation | Resource | Number |
 |-----------|----------|--------|
-| Elder abuse (in-home) | State APS hotline | Varies by state; call 211 |
+| Immediate danger | Emergency services | Call 911 |
+| Elder abuse (in-home) | State APS hotline | Varies by state; call 211 or the Eldercare Locator (1-800-677-1116) for your state's number |
 | Elder abuse (facility) | Long-Term Care Ombudsman | State-specific |
 | Crisis / suicide | 988 Suicide & Crisis Lifeline | Call or text 988 |
 | General help | 211 | Dial 211 |
@@ -112,11 +115,11 @@ The goal: reduce friction between a need and the program that meets it.
 
 ## Missouri-Specific (for Doug's context)
 
-- **Division of Senior & Disability Services:** dss.mo.gov
-- **Missouri SenioRx:** 1-800-375-1406 — Rx assistance
-- **CLAIM (Missouri SHIP):** claimmo.org — Free Medicare counseling
+- **Division of Senior & Disability Services:** health.mo.gov
+- **Missouri Rx Plan (MoRx):** Part D drug-cost help for people with both Medicare and MO HealthNet (enrolled automatically) — dss.mo.gov/mhd/morx-general-faqs
+- **Missouri SHIP (formerly CLAIM):** missouriship.org or 1-800-390-3330 — Free Medicare counseling
 - **Missouri AAA map:** health.mo.gov
-- **Adult Abuse/Neglect Hotline:** 1-800-392-0210 (24/7)
+- **Adult Abuse/Neglect Hotline:** 1-800-392-0210 (daily 7am–8pm; report online 24/7 at moapss.health.mo.gov; call 911 in an emergency)
 
 ## Integration Pattern
 
@@ -143,4 +146,4 @@ When a resident or family member expresses a need, the Access For Seniors assist
 - **Meals on Wheels America:** [mealsonwheelsamerica.org](https://mealsonwheelsamerica.org)
 - **988 Suicide & Crisis Lifeline:** [988lifeline.org](https://988lifeline.org) — call or text 988
 - **Missouri DHSS:** [health.mo.gov](https://health.mo.gov)
-- **CLAIM (Missouri SHIP):** [claimmo.org](https://claimmo.org)
+- **Missouri SHIP (formerly CLAIM):** [missouriship.org](https://www.missouriship.org)

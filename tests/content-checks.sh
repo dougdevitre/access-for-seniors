@@ -28,6 +28,20 @@ assert_grep() {
   fi
 }
 
+# assert_no_grep <description> <pattern> <file>
+# Fails if pattern IS found in file (for retired names, numbers and claims).
+assert_no_grep() {
+  local desc="$1" pat="$2" file="$3"
+  if grep -qE "$pat" "$file" 2>/dev/null; then
+    printf "  FAIL  %s\n          found:   /%s/\n          file:    %s\n" \
+      "$desc" "$pat" "$file"
+    FAIL=$((FAIL+1))
+  else
+    printf "  PASS  %s\n" "$desc"
+    PASS=$((PASS+1))
+  fi
+}
+
 # assert_grep_count <description> <pattern> <file> <min>
 # Fails if pattern occurs fewer than <min> times.
 assert_grep_count() {
@@ -118,6 +132,12 @@ assert_grep "Eldercare Locator phone number" \
   "1-800-677-1116" references/aging-services.md
 assert_grep "988 Crisis Lifeline" \
   "988" references/aging-services.md
+assert_grep "911 listed for immediate danger" \
+  "Call 911" references/aging-services.md
+assert_no_grep "Missouri Adult Abuse hotline not described as 24/7 (it is daily 7am-8pm)" \
+  "392-0210 \(24/7\)" references/aging-services.md
+assert_no_grep "Retired program names gone (SenioRx, CLAIM site claimmo.org)" \
+  "SenioRx|claimmo\.org" references/aging-services.md
 
 echo
 echo "-----------------------------------------------------"
