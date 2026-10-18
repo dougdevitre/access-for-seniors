@@ -1,0 +1,96 @@
+name: Link check
+
+# Checks every external link with lychee, so a dead hotline page, a moved
+# government form or a renamed agency site is caught instead of being handed
+# to someone who needs it.
+#   - pull requests that touch the docs, data or skill: fails on a broken link
+#   - monthly schedule (and manual runs): opens or updates one issue instead of failing silently
+# Many resource links here are bare domains ("eldercare.acl.gov"), which lychee
+# does not detect on its own, so the "Collect links" step turns the bare domains
+# in the Markdown into https:// URLs for lychee to check.
+# Exclusions (tel: links, bot-blocking sites, placeholders) live in .lycheeignore,
+# each with a comment saying why.
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - ".lycheeignore"
+      - ".github/workflows/link-check.yml"
+  schedule:
+    - cron: "23 9 1 * *" # 09:23 UTC on the 1st of each month
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lychee:
+    name: Check external links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Collect links
+        run: |
+          mkdir -p lychee
+          grep -rhoE '(^|[^/@.a-zA-Z0-9-])([a-zA-Z0-9-]+\.)+(gov|org|com|net|us|edu|co|io|uk|au|ca)(/[A-Za-z0-9._~/?#=&%-]*[A-Za-z0-9/_-])?' \
+              --include='*.md' --exclude-dir=lychee --exclude-dir=.git . \
+            | sed -E 's#^[^a-zA-Z0-9]##' \
+            | sort -u | sed 's#^#https://#' > lychee/bare-domains.txt
+          wc -l lychee/bare-domains.txt
+
+      - name: Run lychee
+        id: lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          # 403 and 429 are accepted: many .gov and nonprofit sites refuse or
+          # rate-limit GitHub-hosted bots, and a bot block is not a dead link.
+          # 404, 410, DNS/connection errors and repeated 5xx still fail.
+          args: >-
+            --no-progress
+            --max-concurrency 8
+            --max-retries 3
+            --timeout 20
+            --accept 200..=299,403,429
+            --exclude-loopback
+            './**/*.md'
+            'lychee/*.txt'
+          output: lychee/report.md
+          fail: false
+          jobSummary: true
+
+      - name: Fail the pull request on broken links
+        if: github.event_name == 'pull_request' && steps.lychee.outputs.exit_code != '0'
+        run: |
+          # One annotation listing every failure, so it is readable from the checks API too.
+          list="$(grep -E '^\* \[' lychee/report.md | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')"
+          [ -n "$list" ] || list="$(sed 's/%/%25/g' lychee/report.md | head -200 | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Broken links::${list}"
+          exit 1
+
+      - name: Open or update the link-check issue
+        if: github.event_name != 'pull_request' && steps.lychee.outputs.exit_code != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="Link check: broken links found"
+          {
+            echo "The scheduled link check found broken links ([run]($RUN_URL))."
+            echo "Fix or replace each link, or add a commented exclusion to \`.lycheeignore\` if the site only blocks bots."
+            echo
+            cat lychee/report.md
+          } > lychee/issue.md
+          number="$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body-file lychee/issue.md
+          else
+            gh issue create --title "$title" --body-file lychee/issue.md
+          fi
