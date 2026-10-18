@@ -12,6 +12,8 @@ description: >
   programs, AAA referrals, Area Agency on Aging, or any of the 28 modules by name.
 ---
 
+# Access For Seniors — Skill
+
 <!-- BEGIN DISCLAIMER: synced from dougdevitre/access-to, edit it there -->
 ## Notice — show once at the start of every conversation
 
@@ -21,8 +23,6 @@ Before your first answer in a conversation, show this notice once, then continue
 
 The full text is in DISCLAIMER.md at the root of this repository.
 <!-- END DISCLAIMER -->
-
-# Access For Seniors — Skill
 
 **Purpose:** Guide all product, engineering, compliance, and go-to-market work on
 Access For Seniors — a multi-tenant SaaS platform that uses AI to detect senior
