@@ -4,6 +4,12 @@ All notable changes to Access For Seniors will be documented in this file.
 
 ## [Unreleased]
 
+### Changed (retired AWS service and Claude model)
+- Amazon Pinpoint replaced with AWS End User Messaging SMS for SMS/voice across SKILL.md, notifications, modules, the AWS deployment guide and the architecture diagram. AWS ends support for Pinpoint on 2026-10-30. Email stays on SES; push stays on Expo/APNs/FCM (SNS).
+- `references/aws-deployment.md` has a new Messaging Stack section: `AWS::SMSVOICE::*` resources, `@aws-sdk/client-pinpoint-sms-voice-v2`, `sms-voice:SendTextMessage` scoped to phone number/pool ARNs, opt-out lists, and secrets in SSM SecureString.
+- Model selection uses `claude-sonnet-5-5` in place of `claude-sonnet-4-20250514`, which was retired on 2026-06-15.
+- Content checks fail if Pinpoint returns as a provider or the retired model ID reappears.
+
 ### Fixed (companion crisis routing)
 - The AI companion now points residents to 911 and 988 instead of only saying "someone will check in". Emergency words ("fell", "can't breathe", "chest pain", "help me") get "Please call 911 now, or press your call button"; self-harm words get "You can call or text 988 right now — I can stay here with you". Both raise a Tier 3 alert. The companion stays non-clinical: it points to 911, 988 and staff and does not counsel.
 - Tier 3 is now "Urgent": on-duty team + supervisor + facility admin, 5-minute default target (configurable 2–15 minutes) for emergency, self-harm and abuse alerts. It no longer goes to all family.

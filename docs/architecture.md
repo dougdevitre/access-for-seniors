@@ -37,7 +37,7 @@ flowchart TB
 
     subgraph Ext["External"]
         Stripe["Stripe<br/>billing"]
-        Pinpoint["Pinpoint / SES / SNS<br/>notifications"]
+        Messaging["End User Messaging SMS / SES / SNS<br/>notifications"]
     end
 
     Senior --> Gateway
@@ -55,9 +55,9 @@ flowchart TB
 
     DDB -- "streams" --> Aurora
     Lambdas --> Stripe
-    Lambdas --> Pinpoint
-    Pinpoint --> Family
-    Pinpoint --> Staff
+    Lambdas --> Messaging
+    Messaging --> Family
+    Messaging --> Staff
 ```
 
 ## Request path: a resident conversation

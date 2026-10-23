@@ -5,7 +5,7 @@
 | Channel | Provider | Use Case |
 |---------|----------|----------|
 | Push | Expo Push / APNs / FCM | Mobile app alerts (family, caregiver) |
-| SMS | Amazon Pinpoint or Twilio | Alert escalation, family outreach |
+| SMS | AWS End User Messaging SMS or Twilio | Alert escalation, family outreach |
 | Email | Amazon SES | Reports, digests, admin notifications |
 | In-App | WebSocket / polling | Dashboard badges, real-time alerts |
 
