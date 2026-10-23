@@ -92,7 +92,7 @@ flowchart TB
 - **Privacy:** Memory items are PHI — encrypted at rest, access-logged, deletable on request
 
 ### Module 4: Engagement Scoring
-- **Purpose:** Loneliness and social isolation risk detection
+- **Purpose:** Surface reduced-engagement signals (connection signals, not a loneliness or isolation diagnosis)
 - **Reference:** `engagement-scoring.md`
 - **Signal sources:** Conversation frequency, conversation quality (depth, emotional valence), activity participation, family contact frequency, caregiver observations
 - **Score output:** 0–100 engagement index; thresholds: Green (70+), Yellow (40–69), Red (<40)
@@ -213,7 +213,7 @@ flowchart TB
 - **Encryption:** KMS for DynamoDB/RDS/S3; TLS 1.2+ in transit
 - **Audit:** CloudTrail (API-level), application audit log (data access), Clerk audit log (auth events)
 - **Access control:** RBAC with roles: Resident, Family, Caregiver, Admin, Operator
-- **BAA:** Required with AWS, Stripe, Anthropic, Twilio, ElevenLabs, Clerk
+- **BAA:** Required with AWS, Anthropic, Twilio, ElevenLabs, Clerk (confirm availability on each vendor's site); keep PHI out of Stripe metadata and descriptions
 - **Incident response:** Documented runbook; 72-hour breach notification
 - **Penetration testing:** Annual; automated SAST/DAST in CI
 

@@ -32,7 +32,7 @@ Domain and acronym reference for anyone working on Access For Seniors. Citations
 | **PHI** | Protected Health Information under HIPAA — any individually identifiable health information. |
 | **PII** | Personally Identifiable Information — broader than PHI. |
 | **HIPAA** | Health Insurance Portability and Accountability Act. AFS operates under HIPAA-aligned defaults. |
-| **BAA** | Business Associate Agreement — contract required with every sub-processor handling PHI (AWS, Anthropic, Stripe, Twilio, ElevenLabs, Clerk). |
+| **BAA** | Business Associate Agreement — contract required with every sub-processor handling PHI (AWS, Anthropic, Twilio, ElevenLabs, Clerk). Keep PHI out of Stripe; card processing is generally outside HIPAA's business-associate rules. |
 | **RBAC** | Role-based access control. |
 | **Minimum necessary** | HIPAA principle: only access the least PHI required to do the job. |
 | **Safe Harbor** | HIPAA method for de-identification (removes 18 identifier categories). |

@@ -4,6 +4,14 @@ All notable changes to Access For Seniors will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed (QA should-fix, 2026-10-23)
+- Stripe is no longer listed as a BAA vendor. PHI stays out of Stripe metadata and descriptions; HHS guidance treats card processing by a financial institution as outside the business-associate rules. Confirm BAA availability on each vendor's own site.
+- Engagement Scoring no longer claims to "detect loneliness"; SKILL.md and Module 4 now say it surfaces reduced-engagement signals, matching `engagement-scoring.md`.
+- Language rule for the companion and for navigation: reply in the person's language, including the fixed safety replies. Spanish crisis support: call 988 and press 2, or text AYUDA to 988.
+- Aging services: the Initial Enrollment Period is described as a 7-month window; the Medicare Advantage Open Enrollment Period (Jan 1 – Mar 31) is added; GoGoGrandparent is labelled as a paid service; the Missouri section is labelled "Missouri only".
+- `security.md` no longer points to an unshipped `docs/risk-assessment.md`.
+- Content checks for each of the above.
+
 ### Changed (retired AWS service and Claude model)
 - Amazon Pinpoint replaced with AWS End User Messaging SMS for SMS/voice across SKILL.md, notifications, modules, the AWS deployment guide and the architecture diagram. AWS ends support for Pinpoint on 2026-10-30. Email stays on SES; push stays on Expo/APNs/FCM (SNS).
 - `references/aws-deployment.md` has a new Messaging Stack section: `AWS::SMSVOICE::*` resources, `@aws-sdk/client-pinpoint-sms-voice-v2`, `sms-voice:SendTextMessage` scoped to phone number/pool ARNs, opt-out lists, and secrets in SSM SecureString.
