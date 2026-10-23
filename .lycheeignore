@@ -4,8 +4,3 @@
 # tel: and sms: links are phone numbers, not web pages, so there is nothing to fetch.
 ^tel:
 ^sms:
-
-# TEMPORARY: the Access To hub (dougdevitre.org) returned 404 to the link check
-# on 2026-10-18. It is the project's own hub, not a resource for older adults.
-# Remove this line once the hub serves again.
-^https?://(www\.)?dougdevitre\.org
