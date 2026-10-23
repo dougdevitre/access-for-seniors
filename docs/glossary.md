@@ -44,8 +44,8 @@ Domain and acronym reference for anyone working on Access For Seniors. Citations
 |------|---------|
 | **Engagement score** | 0–100 index computed from six signal sources. A **connection signal**, never a diagnosis. |
 | **Engagement zone** | Green (70–100), Yellow (40–69), Red (0–39). |
-| **Distress detection** | Keyword + sentiment pattern check that pauses AI and triggers a caregiver alert. |
-| **Tier 1 / 2 / 3 alerts** | Escalation levels with 24h / 4h / 1h response targets (see [`alerts-system.md`](../references/alerts-system.md)). |
+| **Distress detection** | Keyword + sentiment check. Emergency words get a 911 / call-button reply, self-harm words a 988 reply, abuse disclosures 911 plus the state APS line; each raises an urgent staff alert. |
+| **Tier 1 / 2 / 3 alerts** | Escalation levels with 24h / 4h / 5-minute (configurable) response targets (see [`alerts-system.md`](../references/alerts-system.md)). |
 | **Memory item** | Typed (biographical, preference, episodic, relational) fact stored per resident. |
 | **Persona name** | The configurable name the AI goes by for a given tenant (e.g., "Clara", "Sam"). |
 | **Tenant** | A billing + isolation boundary — typically a facility, sometimes an organization or enterprise. |

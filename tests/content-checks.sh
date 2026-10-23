@@ -140,6 +140,63 @@ assert_no_grep "Retired program names gone (SenioRx, CLAIM site claimmo.org)" \
   "SenioRx|claimmo\.org" references/aging-services.md
 
 echo
+echo "Companion safety routing"
+CE=references/conversation-engine.md
+AL=references/alerts-system.md
+FO=references/family-outreach.md
+# Each emergency trigger is listed and maps to the 911 reply + tier3 alert.
+for phrase in "fell" "can't breathe" "chest pain" "help me"; do
+  assert_grep "Emergency trigger '$phrase' listed in the Emergency group" \
+    "^\| Emergency \|.*\"$phrase\"" "$CE"
+done
+assert_grep "Emergency group raises emergency_keyword at tier3" \
+  "^\| Emergency \|.*emergency_keyword.*tier3" "$CE"
+assert_grep "Emergency reply tells the resident to call 911 or press the call button" \
+  "Please call 911 now, or press your call button" "$CE"
+# Each self-harm trigger is listed and maps to the 988 reply + tier3 alert.
+for phrase in "hurt myself" "end it" "no reason to live" "better off without me"; do
+  assert_grep "Self-harm trigger '$phrase' listed in the Self-harm group" \
+    "^\| Self-harm \|.*\"$phrase\"" "$CE"
+done
+assert_grep "Self-harm group raises self_harm_keyword at tier3" \
+  "^\| Self-harm \|.*self_harm_keyword.*tier3" "$CE"
+assert_grep "Self-harm reply offers 988 and stays with the resident" \
+  "You can call or text 988 right now — I can stay here with you" "$CE"
+# Each abuse trigger is listed and maps to abuse_disclosure.
+for phrase in "they hit me" "scared of" "won't let me"; do
+  assert_grep "Abuse trigger '$phrase' listed in the Abuse group" \
+    "^\| Abuse \|.*\"$phrase\"" "$CE"
+done
+assert_grep "Abuse group raises abuse_disclosure" \
+  "^\| Abuse \|.*abuse_disclosure" "$CE"
+assert_grep "Abuse reply gives 911 for immediate danger" \
+  "If you are in danger right now, please call 911" "$CE"
+assert_grep "Abuse reply gives the Missouri APS hotline with its real hours" \
+  "1-800-392-0210, every day from 7am to 8pm" "$CE"
+assert_grep "Abuse reply gives the Eldercare Locator for other states" \
+  "Eldercare Locator at 1-800-677-1116" "$CE"
+assert_no_grep "Retired reply: emergencies no longer answered with check-in only" \
+  "or mention an emergency, respond with empathy and let them know" "$CE"
+assert_no_grep "Retired rule: no blanket ban on pointing to crisis lines" \
+  "Do NOT attempt to counsel, diagnose, or provide crisis intervention" "$CE"
+assert_grep "Tier 3 is urgent with a minutes-scale target" \
+  "^\| Tier 3 — Urgent \|.*5 minutes" "$AL"
+assert_grep "Tier 3 target is configurable" \
+  "configurable per tenant, 2–15 minutes" "$AL"
+assert_grep "abuse_disclosure alert type defined" \
+  "^\| \`abuse_disclosure\` \|" "$AL"
+assert_grep "abuse_disclosure never goes to family" \
+  "Never sent to.*family members, emergency contacts" "$AL"
+assert_no_grep "Tier 3 no longer goes to all family" \
+  "all family" "$AL"
+assert_grep "Family outreach has an abuse-disclosure hold on highlights" \
+  "Abuse-disclosure hold" "$FO"
+assert_grep "abuse_disclosure in the data model" \
+  "abuse_disclosure" references/data-models.md
+assert_grep "abuse_disclosure in the send_alert MCP schema" \
+  "\"abuse_disclosure\"" references/mcp-tools.md
+
+echo
 echo "-----------------------------------------------------"
 printf "Result: %d passed, %d failed\n" "$PASS" "$FAIL"
 if [[ $FAIL -gt 0 ]]; then

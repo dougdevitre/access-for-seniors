@@ -155,7 +155,8 @@ interface Alert {
   tenantId: string;
   alertId: string;
   residentId: string;
-  type: 'score_drop' | 'distress_keyword' | 'missed_checkin' | 'family_request' | 'predictive';
+  type: 'emergency_keyword' | 'self_harm_keyword' | 'abuse_disclosure' | 'distress_sentiment'
+      | 'score_drop' | 'missed_checkin' | 'family_request' | 'predictive';
   severity: 'tier1' | 'tier2' | 'tier3';
   status: 'open' | 'acknowledged' | 'resolved' | 'escalated';
   title: string;
@@ -166,6 +167,8 @@ interface Alert {
   resolvedBy?: string;
   resolutionNote?: string;
   notificationsSent: { channel: string; recipient: string; sentAt: string }[];
+  restricted?: boolean; // true for abuse_disclosure: designated reporters + supervisor only, never family
+  familyOutreachHold?: { active: boolean; clearedBy?: string; clearedAt?: string; reason?: string };
 }
 ```
 

@@ -55,7 +55,7 @@ Access For Seniors handles Protected Health Information (PHI) including resident
 - **Distress detection:** Keywords and sentiment patterns trigger immediate caregiver alert
 - **No medical/legal advice:** System prompt enforces; post-generation filter catches violations
 - **No diagnosis language:** Engagement scores framed as "connection signals" — never clinical terms
-- **Human escalation:** Any conversation flagged for distress pauses AI and alerts caregiver
+- **Human escalation:** Emergency, self-harm, and abuse triggers switch the companion to fixed safety replies (911 / call button, 988, state Adult Protective Services) and raise an urgent alert; for self-harm the companion stays present with short non-clinical replies until staff take over. Abuse disclosures route to designated reporters only, never family (see `alerts-system.md`)
 - **Prompt injection defense:** Resident input sanitized; system prompt instructs to ignore embedded instructions
 - **Model output logging:** All Claude API responses logged (encrypted) for audit and safety review
 - **Bias monitoring:** Quarterly review of engagement scoring across demographics

@@ -4,6 +4,13 @@ All notable changes to Access For Seniors will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed (companion crisis routing)
+- The AI companion now points residents to 911 and 988 instead of only saying "someone will check in". Emergency words ("fell", "can't breathe", "chest pain", "help me") get "Please call 911 now, or press your call button"; self-harm words get "You can call or text 988 right now — I can stay here with you". Both raise a Tier 3 alert. The companion stays non-clinical: it points to 911, 988 and staff and does not counsel.
+- Tier 3 is now "Urgent": on-duty team + supervisor + facility admin, 5-minute default target (configurable 2–15 minutes) for emergency, self-harm and abuse alerts. It no longer goes to all family.
+- New `abuse_disclosure` alert type. It goes to the designated reporter(s) and supervisor only, never to family or emergency contacts, and holds family Conversation Highlights for that resident until staff clear the hold. The companion gives 911 for immediate danger and the state Adult Protective Services line (Missouri 1-800-392-0210, daily 7am–8pm, online 24/7; other states via the Eldercare Locator, 1-800-677-1116).
+- `distress_keyword` split into `emergency_keyword`, `self_harm_keyword`, `abuse_disclosure` and `distress_sentiment` across the data model, MCP `send_alert` schema, notifications, dashboard, mobile app and docs.
+- Content checks and manual companion safety tests for each trigger group.
+
 ### Added (second iteration)
 - `tests/content-checks.sh` — 29 automated grep assertions covering the module catalogue, data model invariants, engagement scoring zones, HIPAA-aligned retention defaults, tech-stack anchors, MCP tool surface, and aging-services citations. Wired into the CI workflow so regressions get caught on PR.
 - `docs/README.md` — landing page for the docs folder with a reading-map mermaid and tips.

@@ -14,7 +14,7 @@
 |------|---------|
 | Resident List | Sortable/filterable by engagement score, zone, name, last contact |
 | Resident Detail | Profile, engagement trend chart, memory items, conversation themes, alert history |
-| Alert Inbox | Open alerts with severity indicators; acknowledge/resolve actions |
+| Alert Inbox | Open alerts with severity indicators; acknowledge/resolve actions. `abuse_disclosure` alerts appear only for designated reporters and supervisors, with a control to clear the family outreach hold |
 | Shift Notes | Per-resident structured observations (mood, sociability, appetite, mobility, sleep) |
 | Reports | Facility-level engagement trends, alert metrics, family engagement |
 | Settings | Personal notification preferences |
