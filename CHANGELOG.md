@@ -12,6 +12,10 @@ All notable changes to Access For Seniors will be documented in this file.
 - `security.md` no longer points to an unshipped `docs/risk-assessment.md`.
 - Content checks for each of the above.
 
+### Fixed (Eldercare Locator hours, 2026-10-23)
+- Every Eldercare Locator mention now gives its hours with the number: 1-800-677-1116, Mon–Fri, 8am–9pm ET (eldercare.acl.gov contact page).
+- Content check fails if a line naming 1-800-677-1116 in SKILL.md, `references/` or `docs/` has no hours on it or the next line.
+
 ### Changed (retired AWS service and Claude model)
 - Amazon Pinpoint replaced with AWS End User Messaging SMS for SMS/voice across SKILL.md, notifications, modules, the AWS deployment guide and the architecture diagram. AWS ends support for Pinpoint on 2026-10-30. Email stays on SES; push stays on Expo/APNs/FCM (SNS).
 - `references/aws-deployment.md` has a new Messaging Stack section: `AWS::SMSVOICE::*` resources, `@aws-sdk/client-pinpoint-sms-voice-v2`, `sms-voice:SendTextMessage` scoped to phone number/pool ARNs, opt-out lists, and secrets in SSM SecureString.
