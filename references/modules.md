@@ -80,7 +80,7 @@ flowchart TB
 - **Reference:** `conversation-engine.md`
 - **Key capabilities:** Multi-turn conversation, memory injection, topic steering, safety guardrails
 - **Prompt architecture:** System prompt (persona + safety) → memory context → conversation history → user turn
-- **Safety:** Content filter on all outputs, escalation to human on distress signals, no medical/legal advice
+- **Safety:** Content filter on all outputs; on emergency words the companion says to call 911 or press the call button, on self-harm words it offers 988, on abuse disclosure it gives 911 and the state Adult Protective Services line, and each raises an urgent staff alert; no medical/legal advice or counseling
 - **Metrics:** Turns per session, session duration, topic diversity, resident satisfaction (implicit + explicit)
 
 ### Module 3: Memory & Context
@@ -102,9 +102,9 @@ flowchart TB
 ### Module 5: Alert Engine
 - **Purpose:** Threshold-based alerts with routing to appropriate responders
 - **Reference:** `alerts-system.md`
-- **Trigger types:** Score drop below threshold, distress keyword detected, missed check-in streak, family-requested wellness check
-- **Routing:** Alert → (Caregiver AND/OR Family) based on tenant config and alert severity
-- **Escalation:** Tier 1 (caregiver notification) → Tier 2 (supervisor + family) → Tier 3 (facility admin + emergency contact)
+- **Trigger types:** Emergency keywords, self-harm keywords, abuse disclosure, negative-sentiment pattern, score drop below threshold, missed check-in streak, family-requested wellness check
+- **Routing:** Alert → (Caregiver AND/OR Family) based on tenant config and alert severity. Exception: `abuse_disclosure` goes to the designated reporter(s) and supervisor only, never to family or emergency contacts, and holds family Conversation Highlights for that resident until staff clear it
+- **Escalation:** Tier 1 (caregiver, 24h) → Tier 2 (supervisor + emergency family, 4h) → Tier 3 Urgent (on-duty team + supervisor + facility admin, 5-minute default target, configurable; emergency family after staff acknowledge)
 - **Delivery:** Push notification, SMS, email, dashboard badge — configurable per tenant
 
 ### Module 6: Caregiver Dashboard

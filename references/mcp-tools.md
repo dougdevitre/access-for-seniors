@@ -99,12 +99,12 @@ Create and route an alert for a resident.
 ```json
 {
   "name": "send_alert",
-  "description": "Trigger an alert for a resident. Routes to appropriate responders based on severity and tenant config.",
+  "description": "Trigger an alert for a resident. Routes to appropriate responders based on severity and tenant config. abuse_disclosure alerts go to designated reporters and the supervisor only and never to family or emergency contacts.",
   "input_schema": {
     "type": "object",
     "properties": {
       "residentId": { "type": "string" },
-      "type": { "type": "string", "enum": ["score_drop", "distress_keyword", "missed_checkin", "family_request", "predictive"] },
+      "type": { "type": "string", "enum": ["emergency_keyword", "self_harm_keyword", "abuse_disclosure", "distress_sentiment", "score_drop", "missed_checkin", "family_request", "predictive"], "description": "abuse_disclosure is always routed to designated reporters and supervisor only, never family" },
       "severity": { "type": "string", "enum": ["tier1", "tier2", "tier3"] },
       "title": { "type": "string" },
       "description": { "type": "string" }

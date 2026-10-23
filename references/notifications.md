@@ -14,6 +14,9 @@
 1. Check recipient notification preferences (channel + frequency + quiet hours)
 2. If quiet hours active AND severity < tier2 → queue for delivery after quiet hours
 3. If tier2+ → override quiet hours (configurable per tenant)
+   - tier3 → send on every channel at once, not just the preferred one
+   - `abuse_disclosure` → resolve recipients from the designated-reporter and
+     supervisor roles only; drop any family or emergency-contact recipient before send
 4. Send via preferred channel(s); log delivery status
 5. Retry failed deliveries (3 attempts, exponential backoff)
 6. Dead-letter queue for persistent failures → admin notification

@@ -13,7 +13,7 @@
 | Resident Profile | Family | Photo, bio, interests |
 | Connection History | Family | Recent conversation themes (no transcripts) |
 | Send a Message | Family | Prompt to call/text/visit |
-| Notifications | Family | Alert inbox |
+| Notifications | Family | Alert inbox (never shows `abuse_disclosure` alerts) |
 | Conversation (resident) | Resident | Text-based chat with AI companion |
 
 ## Auth

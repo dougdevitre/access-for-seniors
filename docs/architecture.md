@@ -113,10 +113,13 @@ Every downstream call carries the resolved `tenantId`. Middleware rejects any re
 
 ```mermaid
 flowchart TD
-    Trigger["Signal<br/>score drop · distress · missed check-in · family request"]
+    Trigger["Signal<br/>score drop · sentiment · missed check-in · family request"]
+    Urgent["Emergency or self-harm words<br/>(companion gives 911 / 988)"]
+    Abuse["Abuse disclosure<br/>(companion gives 911 + APS)"]
+    Reporter["Designated reporter + supervisor only<br/>never family · holds family highlights<br/>5-min target"]
     Tier1["Tier 1<br/>assigned caregiver<br/>24h target"]
     Tier2["Tier 2<br/>caregiver + supervisor + emergency family<br/>4h target · overrides quiet hours"]
-    Tier3["Tier 3<br/>facility admin + all family + care team<br/>1h target"]
+    Tier3["Tier 3 Urgent<br/>on-duty team + supervisor + facility admin<br/>5-min target (configurable)"]
     Resolved(["Acknowledged → Resolved"])
 
     Trigger --> Tier1
@@ -125,6 +128,9 @@ flowchart TD
     Tier2 -->|ack| Resolved
     Tier2 -->|no ack in 4h| Tier3
     Tier3 --> Resolved
+    Urgent --> Tier3
+    Abuse --> Reporter
+    Reporter --> Resolved
 ```
 
 ## Module ↔ reference file map
