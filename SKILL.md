@@ -81,7 +81,7 @@ values: equity, trauma-informed design, community-grounded, evidence-based.
 - **Database:** DynamoDB (primary), RDS Aurora (reporting/analytics)
 - **Storage:** S3 (audio files, exports, documents)
 - **Auth:** Amazon Cognito (enterprise/SAML tenants) + Clerk (consumer/staff web)
-- **Messaging:** SES (email), SNS (push), Pinpoint (SMS campaigns)
+- **Messaging:** SES (email), SNS (push), AWS End User Messaging SMS (SMS/voice). Do not use Amazon Pinpoint: AWS ends support on 2026-10-30
 - **Secrets:** SSM Parameter Store (SecureString) — never hardcode
 - **IaC:** AWS CDK (TypeScript preferred)
 

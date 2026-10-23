@@ -175,7 +175,7 @@ companion safety prompts in `tests/manual-tests.md` cover each group.
 
 | Context | Model | Rationale |
 |---------|-------|-----------|
-| Standard conversation | claude-sonnet-4-20250514 | Cost-effective, good quality |
+| Standard conversation | claude-sonnet-5-5 | Cost-effective, good quality |
 | Deep engagement (low-score resident) | claude-opus-4-6 | Higher quality for nuanced conversation |
-| Memory extraction (post-conversation) | claude-sonnet-4-20250514 | Structured extraction task |
-| Message generation (family outreach) | claude-sonnet-4-20250514 | Short-form copy |
+| Memory extraction (post-conversation) | claude-sonnet-5-5 | Structured extraction task |
+| Message generation (family outreach) | claude-sonnet-5-5 | Short-form copy |

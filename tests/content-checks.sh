@@ -197,6 +197,19 @@ assert_grep "abuse_disclosure in the send_alert MCP schema" \
   "\"abuse_disclosure\"" references/mcp-tools.md
 
 echo
+echo "Retired services and models"
+for f in SKILL.md references/*.md docs/*.md; do
+  assert_no_grep "No Amazon Pinpoint as a provider (end of support 2026-10-30): $f" \
+    "Pinpoint \(SMS|Pinpoint/|/Pinpoint|Amazon Pinpoint or|SNS \+ Pinpoint|SNS · Pinpoint|Pinpoint --> |--> Pinpoint" "$f"
+  assert_no_grep "No retired model ID claude-sonnet-4-20250514: $f" \
+    "claude-sonnet-4-20250514" "$f"
+done
+assert_grep "Messaging stack names End User Messaging SMS" \
+  "AWS::SMSVOICE::PhoneNumber" references/aws-deployment.md
+assert_grep "SMS send permission is scoped, not wildcard" \
+  "sms-voice:SendTextMessage" references/aws-deployment.md
+
+echo
 echo "-----------------------------------------------------"
 printf "Result: %d passed, %d failed\n" "$PASS" "$FAIL"
 if [[ $FAIL -gt 0 ]]; then

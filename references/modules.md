@@ -153,7 +153,7 @@ flowchart TB
 ### Module 11: Notifications
 - **Purpose:** Multi-channel delivery engine
 - **Reference:** `notifications.md`
-- **Channels:** Push (Expo/APNs/FCM), SMS (Pinpoint/Twilio), Email (SES), In-app badge
+- **Channels:** Push (Expo/APNs/FCM), SMS (AWS End User Messaging SMS/Twilio), Email (SES), In-app badge
 - **Preferences:** Per-user channel + frequency preferences; quiet hours; do-not-disturb
 - **Templates:** Handlebars-based templates with localization support
 
@@ -195,7 +195,7 @@ flowchart TB
 ### Module 16: AWS Infrastructure
 - **Purpose:** All cloud resources defined as CDK (TypeScript)
 - **Reference:** `aws-deployment.md`
-- **Stacks:** API (Lambda/API Gateway), Data (DynamoDB + RDS), Auth (Cognito), Storage (S3), Messaging (SES/SNS/Pinpoint), Monitoring (CloudWatch + alarms)
+- **Stacks:** API (Lambda/API Gateway), Data (DynamoDB + RDS), Auth (Cognito), Storage (S3), Messaging (SES/SNS/End User Messaging SMS), Monitoring (CloudWatch + alarms)
 - **Environments:** dev, staging, prod — isolated AWS accounts preferred
 - **IAM:** Least-privilege per Lambda; no wildcard policies; service-linked roles
 - **Secrets:** SSM SecureString for API keys, DB creds, Stripe keys
