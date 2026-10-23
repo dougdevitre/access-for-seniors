@@ -139,6 +139,30 @@ assert_no_grep "Missouri Adult Abuse hotline not described as 24/7 (it is daily 
 assert_no_grep "Retired program names gone (SenioRx, CLAIM site claimmo.org)" \
   "SenioRx|claimmo\.org" references/aging-services.md
 
+assert_grep "Initial Enrollment is a 7-month window" \
+  "7-month window" references/aging-services.md
+assert_grep "Medicare Advantage Open Enrollment Jan 1 – Mar 31 listed" \
+  "Medicare Advantage Open Enrollment:\*\* Jan 1 – Mar 31" references/aging-services.md
+assert_no_grep "Missouri section labelled 'Missouri only', not personal context" \
+  "for Doug's context" references/aging-services.md
+assert_grep "Navigation replies in the person's language, with Spanish 988" \
+  "Reply in the person's language.*988 and press 2" references/aging-services.md
+
+echo
+echo "Language and framing"
+assert_grep "Companion replies in the resident's language" \
+  "Reply in \{residentFirstName\}'s language" references/conversation-engine.md
+assert_grep "Fixed safety replies are delivered in the resident's language" \
+  "deliver every fixed reply in the resident's language" references/conversation-engine.md
+assert_no_grep "SKILL.md does not claim to detect loneliness" \
+  "detect senior" SKILL.md
+assert_no_grep "Module 4 purpose is not loneliness detection" \
+  "Loneliness and social isolation risk detection" references/modules.md
+for f in SKILL.md references/security.md references/modules.md docs/glossary.md; do
+  assert_no_grep "No unverified Stripe BAA requirement: $f" \
+    "BAA (with|:).*Stripe|Stripe, Anthropic|Anthropic, Stripe" "$f"
+done
+
 echo
 echo "Companion safety routing"
 CE=references/conversation-engine.md

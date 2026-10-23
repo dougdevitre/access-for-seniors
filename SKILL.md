@@ -25,8 +25,8 @@ The full text is in DISCLAIMER.md at the root of this repository.
 <!-- END DISCLAIMER -->
 
 **Purpose:** Guide all product, engineering, compliance, and go-to-market work on
-Access For Seniors — a multi-tenant SaaS platform that uses AI to detect senior
-loneliness, generate meaningful conversations, coordinate family outreach, surface
+Access For Seniors — a multi-tenant SaaS platform that uses AI to surface
+reduced-engagement signals, generate meaningful conversations, coordinate family outreach, surface
 alerts to caregivers, and connect older adults to aging-services resources.
 
 **Initiative context:** Access For Seniors is part of the "Access To" civic tech family
@@ -157,7 +157,8 @@ For detailed specs on any module, read `references/modules.md`.
 1. Read `references/aging-services.md`
 2. Match need to program (OAA Title III-B, III-C, III-D, III-E, VII; Medicare Parts A–D; Medicaid LTSS; AAA; Meals on Wheels; etc.)
 3. Provide eligibility criteria, how to apply, and referral handoff
-4. Cite primary sources (acl.gov, medicare.gov, cms.gov, state AAA)
+4. Reply in the person's language (for Spanish crisis support: 988, press 2, or text AYUDA to 988)
+5. Cite primary sources (acl.gov, medicare.gov, cms.gov, state AAA)
 
 ### Infrastructure / Deployment Request
 1. Read `references/aws-deployment.md` + `references/cicd.md`
@@ -185,7 +186,8 @@ For detailed specs on any module, read `references/modules.md`.
 - **Data Retention:** Configurable per tenant; default 7-year retention for care records
 - **Consent:** Resident/family consent captured and stored before AI interaction begins
 - **AI Outputs:** Never present engagement scores as clinical diagnoses; always frame as "connection signals"
-- **BAA:** Require BAA with AWS, Stripe, Anthropic, Twilio, ElevenLabs, Clerk, and any other sub-processor handling PHI
+- **BAA:** Require a BAA with AWS, Anthropic, Twilio, ElevenLabs, Clerk, and any other sub-processor handling PHI. Confirm BAA availability for each vendor on its own site.
+- **Stripe:** Keep PHI out of Stripe metadata, descriptions and other free-text fields. HHS guidance says a business associate contract is not required when a financial institution processes card payments as a normal financial service; confirm Stripe's own HIPAA position with Stripe before relying on it
 - **Elder abuse mandatory reporting:** Where applicable (state-dependent), system supports and documents reports per state APS/Ombudsman requirements
 
 For detailed security controls → read `references/security.md`

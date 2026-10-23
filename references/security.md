@@ -5,11 +5,12 @@
 Access For Seniors handles Protected Health Information (PHI) including resident health-related behavioral data, engagement scores that may inform care decisions, and conversation content. Apply HIPAA Security Rule controls.
 
 ### Administrative Safeguards
-- **Risk assessment:** Annual; document in `docs/risk-assessment.md`
+- **Risk assessment:** Annual; each tenant deployment documents its own (this repo does not ship a risk-assessment template)
 - **Workforce training:** All staff with PHI access complete HIPAA training (Module 25)
 - **Access management:** Role-based; minimum necessary; quarterly access reviews
 - **Incident response:** Documented runbook; 72-hour breach notification to HHS; state notification per applicable law
-- **BAA requirements:** Execute BAA with every sub-processor: AWS, Stripe, Anthropic, Twilio, ElevenLabs, Clerk, any analytics vendor
+- **BAA requirements:** Execute a BAA with every sub-processor that handles PHI: AWS, Anthropic, Twilio, ElevenLabs, Clerk, any analytics vendor. Confirm BAA availability for each vendor on its own site.
+- **Stripe (payments):** Keep PHI out of Stripe metadata, descriptions and other free-text fields. HHS guidance says a business associate contract is not required when a financial institution processes card payments as a normal financial service; confirm Stripe's own HIPAA position with Stripe before relying on it
 
 ### Technical Safeguards
 - **Encryption at rest:** AES-256 via AWS KMS (DynamoDB, RDS, S3, EBS)

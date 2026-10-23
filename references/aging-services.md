@@ -13,6 +13,7 @@ The goal: reduce friction between a need and the program that meets it.
 - Plain language over bureaucratic jargon ("help with meals" vs "Title III-C nutrition services")
 - Respect autonomy — offer options, never prescribe
 - Acknowledge barriers (transportation, language, digital literacy) and plan around them
+- Reply in the person's language. If they write or speak in Spanish, answer in Spanish. For crisis support in Spanish: call 988 and press 2, or text AYUDA to 988. For other languages, 988 offers phone interpreters. The Eldercare Locator is 1-800-677-1116
 
 ## Primary Programs
 
@@ -38,9 +39,10 @@ The goal: reduce friction between a need and the program that meets it.
 | Medigap | Supplement to fill Original Medicare gaps | Varies |
 
 **Enrollment periods:**
-- **Initial:** 3 months before to 3 months after turning 65
+- **Initial:** a 7-month window: the 3 months before the month you turn 65, that month, and the 3 months after
 - **General:** Jan 1 – Mar 31 (late enrollment in Part B; penalty may apply)
 - **Open (AEP):** Oct 15 – Dec 7 (switch Advantage or Part D)
+- **Medicare Advantage Open Enrollment:** Jan 1 – Mar 31, for people already in a Medicare Advantage Plan: one change, either to another Advantage Plan or back to Original Medicare
 - **Special:** After qualifying event (job loss, move, etc.)
 
 **Free counseling:** SHIP (State Health Insurance Assistance Program) — shiphelp.org
@@ -99,7 +101,7 @@ The goal: reduce friction between a need and the program that meets it.
 ### Transportation
 - OAA Title III-B transportation services via AAA
 - Medicaid Non-Emergency Medical Transportation (NEMT)
-- GoGoGrandparent, Uber/Lyft senior programs
+- GoGoGrandparent (paid service: membership plus a per-minute concierge fee on top of the ride fare), Uber/Lyft senior programs
 - Local volunteer driver programs
 
 ## Crisis Lines
@@ -113,7 +115,7 @@ The goal: reduce friction between a need and the program that meets it.
 | General help | 211 | Dial 211 |
 | Medicare fraud | Senior Medicare Patrol | 1-877-808-2468 |
 
-## Missouri-Specific (for Doug's context)
+## Missouri only
 
 - **Division of Senior & Disability Services:** health.mo.gov
 - **Missouri Rx Plan (MoRx):** Part D drug-cost help for people with both Medicare and MO HealthNet (enrolled automatically) — dss.mo.gov/mhd/morx-general-faqs
