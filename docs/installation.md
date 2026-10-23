@@ -13,7 +13,7 @@ flowchart TD
     Start(["You want to use Access For Seniors"])
     Q1{"Running Claude.ai or<br/>Claude Desktop?"}
     Q2{"Running Claude Code<br/>or self-hosted?"}
-    Opt1["Option 1<br/>Build and upload .skill"]
+    Opt1["Option 1<br/>Download and upload the install file"]
     Opt2["Option 2<br/>Mount as skill directory"]
     Opt3["Option 3<br/>Clone and reference directly"]
 
@@ -24,23 +24,22 @@ flowchart TD
     Q2 -->|other| Opt3
 ```
 
-## Option 1: Install as a Claude Skill (`.skill` file)
+## Option 1: Install in Claude (download the install file)
 
-### Build the package
+1. Download [`access-for-seniors.zip`](https://github.com/dougdevitre/access-for-seniors/releases/download/skill-latest/access-for-seniors.zip). Don't unzip it.
+2. Turn on **Code execution and file creation** under Settings → Capabilities (Free, Pro and Max plans; on Team it's on by default; on Enterprise an owner enables it).
+3. Go to **Customize → Skills**, click **+**, then **+ Create skill**, then **Upload a skill**.
+4. Choose `access-for-seniors.zip`, then make sure the skill is toggled on.
+
+These steps follow Claude's help center: [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude). The install file is rebuilt automatically whenever the skill changes on `main`.
+
+### Build the install file yourself (optional)
 
 ```bash
-chmod +x scripts/build-skill.sh
-./scripts/build-skill.sh
+bash scripts/build-skill-zip.sh
 ```
 
-This creates `dist/access-for-seniors.skill`.
-
-### Install in Claude.ai or Claude Desktop
-
-1. Go to **Settings → Capabilities → Skills**
-2. Click **Upload Skill**
-3. Select `dist/access-for-seniors.skill`
-4. The skill will be available in new conversations
+This creates `dist/access-for-seniors.zip`, the same file the release publishes. The older `./scripts/build-skill.sh` still builds `dist/access-for-seniors.skill` for anyone who uses it.
 
 ## Option 2: Install as a local skill directory
 
@@ -102,9 +101,9 @@ If the skill is working, Claude will reference the Access For Seniors architectu
 - `zip: command not found` — install zip (`sudo apt install zip` or `brew install zip`).
 - Output still includes the old committed artifact at the repo root — make sure you pulled after the `.gitignore` update and deleted `access-for-seniors.skill` from your working tree.
 
-### The uploaded `.skill` file isn't accepted
+### The upload isn't accepted
 
-- Make sure you're uploading `dist/access-for-seniors.skill`, not the staging directory.
+- Make sure you're uploading `access-for-seniors.zip` itself, not an unzipped folder.
 - Claude skill uploads expect a zip with `SKILL.md` at the root of a single top-level directory.
 - Rebuild from a clean checkout if the package structure looks off: `rm -rf dist && ./scripts/build-skill.sh`.
 
