@@ -18,7 +18,7 @@ Access For Seniors helps senior living communities, home health agencies, health
 - [Tech Stack](#tech-stack)
 - [28 Modules](#28-modules)
 - [Who It Serves](#who-it-serves)
-- [Using as a Claude Skill](#using-as-a-claude-skill)
+- [Use as a Claude Skill](#use-as-a-claude-skill)
 - [Quick Start](#quick-start)
 - [Security & Compliance](#security--compliance)
 - [Brand Voice](#brand-voice)
@@ -125,9 +125,24 @@ flowchart LR
 | Enterprise Operator | API + Admin | Multi-site management, analytics |
 | AAA / Community Worker | Navigator Portal | Referral tracking, eligibility screening |
 
-## Using as a Claude Skill
+## Use as a Claude Skill
 
-This repo is structured as a Claude skill. Install the `.skill` package or point your Claude skill directory to this repo.
+Add Access for Seniors to Claude at [claude.ai](https://claude.ai) in a few clicks. It works on the Free, Pro, Max, Team and Enterprise plans.
+
+1. **Download the install file:** [access-for-seniors.zip](https://github.com/dougdevitre/access-for-seniors/releases/download/skill-latest/access-for-seniors.zip)
+2. **Don't unzip it.** Claude needs the `.zip` file just as it downloaded.
+3. **Turn on code execution.** Skills need it.
+   - **Free, Pro or Max:** open **Settings > Capabilities** and turn on **Code execution and file creation**.
+   - **Team or Enterprise:** an organization owner opens **Organization settings > Plugins & skills**, clicks the **Policy** tab, and turns on both **Code execution and file creation** and **Skills**.
+4. **Upload it:** open **Customize > Skills**, click **+**, then **+ Create skill**, then **Upload a skill**, and choose `access-for-seniors.zip`.
+5. **Turn it on:** in **Customize > Skills**, switch on **access-for-seniors**. Claude will now use it for any Access for Seniors question.
+
+These steps come from Claude's help center: [Use Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
+If the link 404s, the first release hasn't been published yet.
+
+Maintainers and forks: `scripts/build-skill-zip.sh` builds the same file into `dist/`. The Skill package workflow republishes it on every change to `main`.
+
+The repo layout (the zip holds `SKILL.md`, `references/`, `DISCLAIMER.md` and `LICENSE.md`):
 
 ```
 access-for-seniors/
@@ -164,7 +179,7 @@ cd access-for-seniors
 
 Then:
 
-- **As a Claude skill:** upload `dist/access-for-seniors.skill` in Claude settings → Capabilities → Skills
+- **As a Claude skill:** follow [Use as a Claude Skill](#use-as-a-claude-skill)
 - **For development:** see [`docs/installation.md`](docs/installation.md) and [`docs/quick-start.md`](docs/quick-start.md)
 - **Contributor architecture overview:** [`docs/architecture.md`](docs/architecture.md)
 - **Domain glossary (OAA, AAA, HCBS, etc.):** [`docs/glossary.md`](docs/glossary.md)

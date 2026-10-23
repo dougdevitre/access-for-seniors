@@ -9,3 +9,8 @@
 # on 2026-10-18. It is the project's own hub, not a resource for older adults.
 # Remove this line once the hub serves again.
 ^https?://(www\.)?dougdevitre\.org
+
+# TEMPORARY: the README's install link points at the skill-latest release,
+# which the Skill package workflow publishes on the first push to main after
+# this file lands. Until then it 404s. Remove this line once the release exists.
+^https://github\.com/dougdevitre/access-for-seniors/releases/download/skill-latest/
