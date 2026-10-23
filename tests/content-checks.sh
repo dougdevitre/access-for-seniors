@@ -145,6 +145,21 @@ assert_grep "Medicare Advantage Open Enrollment Jan 1 – Mar 31 listed" \
   "Medicare Advantage Open Enrollment:\*\* Jan 1 – Mar 31" references/aging-services.md
 assert_no_grep "Missouri section labelled 'Missouri only', not personal context" \
   "for Doug's context" references/aging-services.md
+# Eldercare Locator hours (eldercare.acl.gov): Mon-Fri, 8am-9pm ET. Every line
+# that gives the number must give the hours on that line or the next one.
+for f in $(grep -l "677-1116" SKILL.md references/*.md docs/*.md); do
+  missing=$(awk '/677-1116/ { if ($0 !~ /8am/ && $0 !~ /8 ?am to 9 ?pm/) { pending=FNR; next } }
+                 pending { if ($0 !~ /8am/ && $0 !~ /8 ?am to 9 ?pm/) print pending; pending=0 }
+                 END { if (pending) print pending }' "$f")
+  if [[ -z "$missing" ]]; then
+    printf "  PASS  %s\n" "Eldercare Locator hours given with the number: $f"
+    PASS=$((PASS+1))
+  else
+    printf "  FAIL  %s\n          lines:   %s\n" \
+      "Eldercare Locator hours given with the number: $f" "$(echo $missing)"
+    FAIL=$((FAIL+1))
+  fi
+done
 assert_grep "Navigation replies in the person's language, with Spanish 988" \
   "Reply in the person's language.*988 and press 2" references/aging-services.md
 
