@@ -1,0 +1,107 @@
+name: Skill package
+
+# Builds the install file people upload to claude.ai: dist/access-for-seniors.zip,
+# made by scripts/build-skill-zip.sh (one top-level folder named after the skill,
+# runtime files only, frontmatter validated, every file SKILL.md names present).
+#   - pull requests: build and validate it, and attach it to the run as an artifact
+#   - push to main (or a manual run on main): rebuild it and publish it on the one
+#     release tagged skill-latest, so the README's download link always gets the
+#     newest version:
+#     https://github.com/dougdevitre/access-for-seniors/releases/download/skill-latest/access-for-seniors.zip
+on:
+  pull_request:
+    paths:
+      - "SKILL.md"
+      - "references/**"
+      - "DISCLAIMER.md"
+      - "LICENSE.md"
+      - "scripts/build-skill-zip.sh"
+      - ".github/scripts/check-skill-frontmatter.py"
+      - ".github/workflows/skill-package.yml"
+  push:
+    branches: [main]
+    paths:
+      - "SKILL.md"
+      - "references/**"
+      - "DISCLAIMER.md"
+      - "LICENSE.md"
+      - "scripts/build-skill-zip.sh"
+      - ".github/scripts/check-skill-frontmatter.py"
+      - ".github/workflows/skill-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and validate the skill zip
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Make sure PyYAML is available
+        run: python3 -c 'import yaml' 2>/dev/null || { sudo apt-get update -q && sudo apt-get install -y -q python3-yaml; }
+
+      - name: Build dist/access-for-seniors.zip
+        run: |
+          scripts/build-skill-zip.sh | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Attach the zip to this run
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: access-for-seniors-skill
+          path: dist/access-for-seniors.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish the install file (skill-latest)
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: skill-latest-release
+      cancel-in-progress: false
+    # Not "ZIP": the zip program reads $ZIP as extra options and exits 15.
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: skill-latest
+      TITLE: Install file (latest)
+      ZIP_PATH: dist/access-for-seniors.zip
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Make sure PyYAML is available
+        run: python3 -c 'import yaml' 2>/dev/null || { sudo apt-get update -q && sudo apt-get install -y -q python3-yaml; }
+
+      - name: Build dist/access-for-seniors.zip
+        # The build is reproducible, so this is the same file the build job checked.
+        run: scripts/build-skill-zip.sh
+
+      - name: Create or update the skill-latest release
+        run: |
+          {
+            echo "The file to upload to claude.ai. Download **access-for-seniors.zip** below and don't unzip it."
+            echo
+            echo "Install steps: https://github.com/${GITHUB_REPOSITORY}#use-as-a-claude-skill"
+            echo
+            echo "Built from ${GITHUB_SHA} by [this run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})."
+          } > release-notes.md
+
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP_PATH" --clobber --repo "$GITHUB_REPOSITORY"
+            gh release edit "$TAG" --title "$TITLE" --notes-file release-notes.md --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$TAG" "$ZIP_PATH" --target "$GITHUB_SHA" \
+              --title "$TITLE" --notes-file release-notes.md --repo "$GITHUB_REPOSITORY"
+          fi
+
+      - name: Move the skill-latest tag to this commit
+        run: |
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/git/refs/tags/${TAG}" \
+            -f sha="$GITHUB_SHA" -F force=true --jq '.object.sha'
