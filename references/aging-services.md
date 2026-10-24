@@ -13,7 +13,7 @@ The goal: reduce friction between a need and the program that meets it.
 - Plain language over bureaucratic jargon ("help with meals" vs "Title III-C nutrition services")
 - Respect autonomy — offer options, never prescribe
 - Acknowledge barriers (transportation, language, digital literacy) and plan around them
-- Reply in the person's language. If they write or speak in Spanish, answer in Spanish. For crisis support in Spanish: call 988 and press 2, or text AYUDA to 988. For other languages, 988 offers phone interpreters. The Eldercare Locator is 1-800-677-1116
+- Reply in the person's language. If they write or speak in Spanish, answer in Spanish. For crisis support in Spanish: call 988 and press 2, or text AYUDA to 988. For other languages, 988 offers phone interpreters. The Eldercare Locator is 1-800-677-1116 (Mon–Fri, 8am–9pm ET)
 
 ## Primary Programs
 
@@ -109,7 +109,7 @@ The goal: reduce friction between a need and the program that meets it.
 | Situation | Resource | Number |
 |-----------|----------|--------|
 | Immediate danger | Emergency services | Call 911 |
-| Elder abuse (in-home) | State APS hotline | Varies by state; call 211 or the Eldercare Locator (1-800-677-1116) for your state's number |
+| Elder abuse (in-home) | State APS hotline | Varies by state; call 211 or the Eldercare Locator (1-800-677-1116, Mon–Fri, 8am–9pm ET) for your state's number |
 | Elder abuse (facility) | Long-Term Care Ombudsman | State-specific |
 | Crisis / suicide | 988 Suicide & Crisis Lifeline | Call or text 988 |
 | General help | 211 | Dial 211 |
@@ -140,7 +140,7 @@ When a resident or family member expresses a need, the Access For Seniors assist
 - **ACL (Administration for Community Living):** [acl.gov](https://acl.gov)
 - **Medicare.gov:** [medicare.gov](https://medicare.gov)
 - **CMS (Medicaid):** [cms.gov](https://cms.gov) · [medicaid.gov](https://medicaid.gov)
-- **Eldercare Locator:** [eldercare.acl.gov](https://eldercare.acl.gov) — 1-800-677-1116
+- **Eldercare Locator:** [eldercare.acl.gov](https://eldercare.acl.gov) — 1-800-677-1116 (Mon–Fri, 8am–9pm ET)
 - **SHIP (State Health Insurance Assistance):** [shiphelp.org](https://shiphelp.org)
 - **Family Caregiver Alliance:** [caregiver.org](https://caregiver.org)
 - **ARCH National Respite Network:** [archrespite.org](https://archrespite.org)

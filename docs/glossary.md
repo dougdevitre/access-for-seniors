@@ -7,7 +7,7 @@ Domain and acronym reference for anyone working on Access For Seniors. Citations
 | Term | Full name | What it is |
 |------|-----------|------------|
 | **OAA** | Older Americans Act | Federal law authorizing core aging-services funding (Title III-B, III-C, III-D, III-E, VII). acl.gov |
-| **AAA** | Area Agency on Aging | Regional hub that coordinates OAA programs locally. Find one via Eldercare Locator (1-800-677-1116 or eldercare.acl.gov). |
+| **AAA** | Area Agency on Aging | Regional hub that coordinates OAA programs locally. Find one via Eldercare Locator (1-800-677-1116, Mon–Fri, 8am–9pm ET, or eldercare.acl.gov). |
 | **ADRC** | Aging and Disability Resource Center | Single-entry-point program covering both aging and disability services ("no wrong door"). |
 | **ACL** | Administration for Community Living | HHS agency that oversees OAA and disability programs. acl.gov |
 | **APS** | Adult Protective Services | State-run hotlines and investigators for elder abuse in the community. |
