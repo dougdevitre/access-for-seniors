@@ -154,11 +154,13 @@ For detailed specs on any module, read `references/modules.md`.
 4. Never present AI-generated engagement scores as clinical or medical assessments
 
 ### Aging-Services Navigation Request
-1. Read `references/aging-services.md`
-2. Match need to program (OAA Title III-B, III-C, III-D, III-E, VII; Medicare Parts A–D; Medicaid LTSS; AAA; Meals on Wheels; etc.)
-3. Provide eligibility criteria, how to apply, and referral handoff
-4. Reply in the person's language (for Spanish crisis support: 988, press 2, or text AYUDA to 988)
-5. Cite primary sources (acl.gov, medicare.gov, cms.gov, state AAA)
+1. If the older adult may be in danger (abuse, a fall, a medical emergency), 911 first; for crisis support, call or text 988
+2. Read `references/aging-services.md`
+3. Ask once which state the older adult lives in, unless already said. Label Missouri programs and numbers **"Missouri only"**; elsewhere give the national route (Eldercare Locator, the state's Area Agency on Aging and APS line) and say state rules vary. Never hold back 911 or 988 while waiting
+4. Match need to program (OAA Title III-B, III-C, III-D, III-E, VII; Medicare Parts A–D; Medicaid LTSS; AAA; Meals on Wheels; etc.)
+5. Provide eligibility criteria, how to apply, and referral handoff
+6. Reply in the person's language (for Spanish crisis support: 988, press 2, or text AYUDA to 988)
+7. Cite primary sources (acl.gov, medicare.gov, cms.gov, state AAA)
 
 ### Infrastructure / Deployment Request
 1. Read `references/aws-deployment.md` + `references/cicd.md`
