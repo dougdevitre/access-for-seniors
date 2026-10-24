@@ -1,125 +1,163 @@
 #!/usr/bin/env node
-// check-facts.mjs — the fact ledger gate.
+// check-facts.mjs — the fact ledger gate (shared across the Access To repos).
 //
 // facts/ledger.json lists every phone number, dollar figure, deadline and
-// program-status claim this skill states, with the primary source it was
-// verified against, the date, and the files that carry it. This script FAILS
-// (exit 1) when:
-//   1. a fact is past due: verified_on + recheck_days (or recheck_days_default)
-//      is before today — someone must re-verify it on its source and bump the date;
-//   2. a listed file does not exist;
-//   3. the fact's `value` string no longer appears verbatim in any of its listed
-//      files — so an edit cannot silently drift the text away from the ledger.
-// Every failure is printed, not just the first. The date can be pinned with
-// CHECK_DATE=YYYY-MM-DD for deterministic runs and tests.
+// program-status claim the skill makes, with the primary source it was checked
+// against, the date it was checked and how long that check is good for. This
+// script fails CI (exit 1) when:
+//   1. a fact is past due — `verified_on` + `recheck_days` (or the explicit
+//      `recheck_on` date) is before today;
+//   2. a path in a fact's `files` does not exist;
+//   3. a fact's `value` (or, when given, each string in `match`) no longer
+//      appears in any of its listed files, or a listed file contains none of
+//      them — so a silent edit cannot drift away from the ledger;
+//   4. the ledger itself is malformed (missing fields, duplicate ids, a
+//      `verified_on` in the future, a non-https source).
+// Every failure is printed, not just the first. A fact due within 14 days is a
+// warning. Facts verified against an annual cycle set `recheck_on` to the next
+// cycle's date instead of a day count.
 //
-// Same pattern as access-to-energy's scripts/check-staleness.mjs: pure logic is
-// exported (and unit-tested in scripts/test/check-facts.test.mjs); main() does IO.
-// No dependencies.
+// Usage:
+//   node scripts/check-facts.mjs                       # ledger at facts/ledger.json, files under the repo root
+//   node scripts/check-facts.mjs --root <dir>          # files live under <dir> (e.g. an extracted .skill package)
+//   node scripts/check-facts.mjs --ledger <file.json>  # a ledger somewhere else
+//   CHECK_DATE=2026-12-01 node scripts/check-facts.mjs # pin "today" for deterministic runs and tests
+//
+// No dependencies. The pure evaluation logic (`evaluateLedger`) is exported and
+// unit-tested in scripts/test/check-facts.test.mjs; main() does the IO.
+// Modelled on access-to-energy's scripts/check-staleness.mjs.
 
 import { readFile, access } from "node:fs/promises";
+import { resolve, join } from "node:path";
 import { pathToFileURL } from "node:url";
-import path from "node:path";
 
 export const DAY = 86400000;
-export const WARN_DAYS = 14; // warn (never fail) when a recheck is this close
+export const WARN_WINDOW_DAYS = 14;
+const REQUIRED = ["id", "claim", "value", "source", "verified_on", "files"];
 
-export const isISODate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(`${s}T00:00:00Z`));
-export const utc = (s) => new Date(`${s}T00:00:00Z`);
+export const isISODate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
+const utc = (s) => new Date(`${s}T00:00:00Z`);
 const iso = (d) => d.toISOString().slice(0, 10);
 
-// Structural problems with the ledger itself. Returns an array of messages.
-export function validateLedger(ledger) {
+// Whitespace-insensitive comparison so a wrapped line or a non-breaking space
+// does not count as drift. Nothing else is normalised: a changed digit, dash
+// or word is drift.
+export const normalise = (s) => String(s).replace(/[\s ]+/g, " ").trim();
+
+export function dueDate(fact, defaultDays) {
+  if (fact.recheck_on !== undefined) return isISODate(fact.recheck_on) ? utc(fact.recheck_on) : null;
+  const days = fact.recheck_days ?? defaultDays;
+  if (!Number.isInteger(days) || days <= 0) return null;
+  return new Date(utc(fact.verified_on).getTime() + days * DAY);
+}
+
+// Validate one fact's shape. Returns an array of error strings (empty === ok).
+export function validateFact(fact, defaultDays) {
   const errors = [];
-  if (!ledger || typeof ledger !== "object" || Array.isArray(ledger)) return ["ledger must be a JSON object"];
-  const def = ledger.recheck_days_default;
-  if (!Number.isInteger(def) || def <= 0) errors.push("recheck_days_default must be a positive integer");
-  if (!Array.isArray(ledger.facts)) return [...errors, "facts must be an array"];
+  const tag = fact && typeof fact.id === "string" ? fact.id : "<no id>";
+  if (!fact || typeof fact !== "object") return [`${tag}: fact is not an object`];
+  for (const key of REQUIRED) if (fact[key] === undefined || fact[key] === null || fact[key] === "") errors.push(`${tag}: missing "${key}"`);
+  if (fact.verified_on !== undefined && !isISODate(fact.verified_on)) errors.push(`${tag}: verified_on "${fact.verified_on}" is not a YYYY-MM-DD date`);
+  if (fact.recheck_days !== undefined && (!Number.isInteger(fact.recheck_days) || fact.recheck_days <= 0)) errors.push(`${tag}: recheck_days must be a positive integer`);
+  if (fact.recheck_on !== undefined && !isISODate(fact.recheck_on)) errors.push(`${tag}: recheck_on "${fact.recheck_on}" is not a YYYY-MM-DD date`);
+  if (fact.recheck_days === undefined && fact.recheck_on === undefined && (!Number.isInteger(defaultDays) || defaultDays <= 0)) errors.push(`${tag}: no recheck_days, no recheck_on and no usable recheck_days_default`);
+  if (fact.source !== undefined && !/^https:\/\/\S+$/.test(String(fact.source))) errors.push(`${tag}: source must be an https URL`);
+  if (fact.files !== undefined && (!Array.isArray(fact.files) || fact.files.length === 0 || !fact.files.every((f) => typeof f === "string" && f))) errors.push(`${tag}: files must be a non-empty array of paths`);
+  if (fact.match !== undefined && (!Array.isArray(fact.match) || fact.match.length === 0 || !fact.match.every((m) => typeof m === "string" && m.trim()))) errors.push(`${tag}: match must be a non-empty array of strings`);
+  return errors;
+}
+
+// Evaluate a whole ledger. `files` maps each relative path to its text, or to
+// null when it does not exist. Returns { errors, warnings } (arrays of strings).
+export function evaluateLedger({ ledger, today, files }) {
+  const errors = [];
+  const warnings = [];
+  if (!ledger || typeof ledger !== "object" || !Array.isArray(ledger.facts)) return { errors: ["ledger: expected an object with a facts array"], warnings };
+  const defaultDays = ledger.recheck_days_default;
+  if (defaultDays !== undefined && (!Number.isInteger(defaultDays) || defaultDays <= 0)) errors.push("ledger: recheck_days_default must be a positive integer");
+  if (!ledger.facts.length) errors.push("ledger: facts is empty");
 
   const seen = new Set();
-  ledger.facts.forEach((f, i) => {
-    const where = `facts[${i}]${f && f.id ? ` (${f.id})` : ""}`;
-    if (!f || typeof f !== "object") return errors.push(`${where}: must be an object`);
-    for (const key of ["id", "claim", "value", "source", "verified_on"]) {
-      if (typeof f[key] !== "string" || !f[key].trim()) errors.push(`${where}: ${key} must be a non-empty string`);
-    }
-    if (typeof f.id === "string") {
-      if (!/^[a-z0-9][a-z0-9-]*$/.test(f.id)) errors.push(`${where}: id must be lowercase kebab-case`);
-      if (seen.has(f.id)) errors.push(`${where}: duplicate id`);
-      seen.add(f.id);
-    }
-    if (typeof f.source === "string" && !/^https?:\/\/\S+$/.test(f.source)) errors.push(`${where}: source must be a URL`);
-    if (f.verified_on !== undefined && !isISODate(f.verified_on)) errors.push(`${where}: verified_on must be YYYY-MM-DD`);
-    if (f.recheck_days !== undefined && (!Number.isInteger(f.recheck_days) || f.recheck_days <= 0)) {
-      errors.push(`${where}: recheck_days must be a positive integer`);
-    }
-    if (!Array.isArray(f.files) || !f.files.length || !f.files.every((p) => typeof p === "string" && p.trim())) {
-      errors.push(`${where}: files must be a non-empty array of paths`);
-    } else if (f.files.some((p) => p.startsWith("/") || p.split(/[\\/]/).includes(".."))) {
-      errors.push(`${where}: files must be relative paths inside the repo`);
-    }
-  });
-  return errors;
-}
-
-// Staleness of one fact. Returns { errors, warnings }.
-export function evaluateDate(fact, today, defaultDays) {
-  const errors = [];
-  const warnings = [];
-  if (!isISODate(fact.verified_on)) return { errors, warnings }; // reported by validateLedger
-  const verified = utc(fact.verified_on);
-  const days = fact.recheck_days ?? defaultDays;
-  const due = new Date(verified.getTime() + days * DAY);
-  if (verified > today) {
-    errors.push(`${fact.id}: verified_on ${fact.verified_on} is in the future (today is ${iso(today)})`);
-  } else if (today >= due) {
-    errors.push(`${fact.id}: recheck due ${iso(due)} (verified ${fact.verified_on} + ${days}d) — re-verify "${fact.claim}" at ${fact.source}`);
-  } else if (today >= new Date(due.getTime() - WARN_DAYS * DAY)) {
-    warnings.push(`${fact.id}: recheck due ${iso(due)} — "${fact.claim}"`);
-  }
-  return { errors, warnings };
-}
-
-// Presence of the value in the listed files. `files` is a Map of path -> text,
-// or path -> null when the file is missing. Returns an array of errors.
-export function evaluateFiles(fact, files) {
-  const errors = [];
-  let found = false;
-  for (const rel of fact.files) {
-    const text = files.get(rel);
-    if (text === null || text === undefined) {
-      errors.push(`${fact.id}: listed file does not exist: ${rel}`);
+  for (const fact of ledger.facts) {
+    const shape = validateFact(fact, defaultDays);
+    if (shape.length) {
+      errors.push(...shape);
       continue;
     }
-    if (text.includes(fact.value)) found = true;
-  }
-  const anyExists = fact.files.some((rel) => typeof files.get(rel) === "string");
-  if (anyExists && !found) {
-    errors.push(`${fact.id}: value "${fact.value}" not found in any listed file (${fact.files.join(", ")}) — the text drifted from the ledger, or the ledger needs updating`);
-  }
-  return errors;
-}
+    const { id } = fact;
+    if (seen.has(id)) errors.push(`${id}: duplicate id`);
+    seen.add(id);
 
-// Whole-ledger evaluation with injected file contents (for tests and for main).
-export function evaluateLedger(ledger, { today, files }) {
-  const errors = validateLedger(ledger);
-  const warnings = [];
-  if (errors.length) return { errors, warnings };
-  for (const fact of ledger.facts) {
-    const d = evaluateDate(fact, today, ledger.recheck_days_default);
-    errors.push(...d.errors);
-    warnings.push(...d.warnings);
-    errors.push(...evaluateFiles(fact, files));
+    const verified = utc(fact.verified_on);
+    if (verified > today) {
+      errors.push(`${id}: verified_on ${fact.verified_on} is in the future (today is ${iso(today)})`);
+      continue;
+    }
+    const due = dueDate(fact, defaultDays);
+    if (!due) errors.push(`${id}: cannot work out a recheck date`);
+    else if (today > due) errors.push(`${id}: past due — verified ${fact.verified_on}, recheck was due ${iso(due)} (${Math.floor((today - due) / DAY)}d ago). Re-verify at ${fact.source} and update verified_on.`);
+    else if (due - today <= WARN_WINDOW_DAYS * DAY) warnings.push(`${id}: recheck due ${iso(due)} (${Math.ceil((due - today) / DAY)}d) — ${fact.source}`);
+
+    const needles = (fact.match ?? [fact.value]).map(normalise);
+    const texts = new Map();
+    for (const rel of fact.files) {
+      const text = files.get(rel);
+      if (text === undefined || text === null) errors.push(`${id}: file not found: ${rel}`);
+      else texts.set(rel, normalise(text));
+    }
+    let anyFound = false;
+    for (const needle of needles) {
+      if ([...texts.values()].some((t) => t.includes(needle))) anyFound = true;
+      else errors.push(`${id}: "${needle}" no longer appears in any listed file (${fact.files.join(", ")}) — the text drifted from the ledger, or the ledger needs updating`);
+    }
+    // Only worth reporting per file when the strings survive somewhere; otherwise the line above already says it all.
+    if (anyFound) {
+      for (const [rel, text] of texts) {
+        if (!needles.some((n) => text.includes(n))) errors.push(`${id}: ${rel} contains none of the ledger strings — remove it from files or restore the text`);
+      }
+    }
   }
   return { errors, warnings };
 }
 
-export async function loadFiles(root, ledger) {
+function parseArgs(argv) {
+  const opts = { ledger: "facts/ledger.json", root: null };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--ledger") opts.ledger = argv[++i];
+    else if (a === "--root") opts.root = argv[++i];
+    else if (a.startsWith("--ledger=")) opts.ledger = a.slice(9);
+    else if (a.startsWith("--root=")) opts.root = a.slice(7);
+    else if (a === "--help" || a === "-h") {
+      console.log("usage: check-facts.mjs [--ledger facts/ledger.json] [--root <dir>]   (env CHECK_DATE=YYYY-MM-DD)");
+      process.exit(0);
+    } else throw new Error(`unknown argument: ${a}`);
+  }
+  if (!opts.ledger || opts.root === "") throw new Error("--ledger and --root need a value");
+  return opts;
+}
+
+export async function main(argv = process.argv.slice(2)) {
+  const opts = parseArgs(argv);
+  const repoRoot = resolve(new URL("..", import.meta.url).pathname);
+  const ledgerPath = resolve(repoRoot, opts.ledger);
+  const root = opts.root ? resolve(opts.root) : repoRoot;
+  const today = process.env.CHECK_DATE ? utc(process.env.CHECK_DATE) : utc(iso(new Date()));
+  if (Number.isNaN(today.getTime())) throw new Error(`CHECK_DATE "${process.env.CHECK_DATE}" is not a YYYY-MM-DD date`);
+
+  let ledger;
+  try {
+    ledger = JSON.parse(await readFile(ledgerPath, "utf8"));
+  } catch (e) {
+    console.error(`✗  cannot read ledger ${ledgerPath}: ${e.message}`);
+    process.exit(1);
+  }
+
   const files = new Map();
-  for (const fact of ledger.facts || []) {
-    for (const rel of fact.files || []) {
-      if (files.has(rel)) continue;
-      const abs = path.join(root, rel);
+  for (const fact of Array.isArray(ledger.facts) ? ledger.facts : []) {
+    for (const rel of Array.isArray(fact?.files) ? fact.files : []) {
+      if (typeof rel !== "string" || files.has(rel)) continue;
+      const abs = join(root, rel);
       try {
         await access(abs);
         files.set(rel, await readFile(abs, "utf8"));
@@ -128,41 +166,21 @@ export async function loadFiles(root, ledger) {
       }
     }
   }
-  return files;
-}
 
-export async function main({ root, ledgerPath, today } = {}) {
-  root = root ?? path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
-  ledgerPath = ledgerPath ?? path.join(root, "facts", "ledger.json");
-  today = today ?? (process.env.CHECK_DATE ? utc(process.env.CHECK_DATE) : new Date());
-  if (Number.isNaN(today.getTime())) throw new Error(`CHECK_DATE must be YYYY-MM-DD, got "${process.env.CHECK_DATE}"`);
-
-  let ledger;
-  try {
-    ledger = JSON.parse(await readFile(ledgerPath, "utf8"));
-  } catch (e) {
-    console.error(`✗  cannot read ${path.relative(root, ledgerPath)}: ${e.message}`);
-    return 1;
-  }
-  const structural = validateLedger(ledger);
-  const files = structural.length ? new Map() : await loadFiles(root, ledger);
-  const { errors, warnings } = evaluateLedger(ledger, { today, files });
+  const { errors, warnings } = evaluateLedger({ ledger, today, files });
+  const count = Array.isArray(ledger.facts) ? ledger.facts.length : 0;
   const stamp = iso(today);
-  const n = Array.isArray(ledger.facts) ? ledger.facts.length : 0;
   if (warnings.length) console.warn(`Fact ledger warnings (as of ${stamp}):\n` + warnings.map((w) => `  !  ${w}`).join("\n"));
   if (errors.length) {
-    console.error(`\nFact ledger FAILURES (as of ${stamp}, ${errors.length} problem(s) across ${n} fact(s)):\n` + errors.map((e) => `  ✗  ${e}`).join("\n"));
-    return 1;
+    console.error(`\nFact ledger FAILURES (as of ${stamp}, ${errors.length} problem(s) in ${count} fact(s)):\n` + errors.map((e) => `  ✗  ${e}`).join("\n"));
+    process.exit(1);
   }
-  console.log(`Fact ledger OK as of ${stamp}: ${n} fact(s) verified, present in their files, and within their recheck window${warnings.length ? ` (${warnings.length} warning(s))` : ""}.`);
-  return 0;
+  console.log(`Fact ledger OK as of ${stamp}: ${count} fact(s) verified, in date and present in their files (root: ${root})${warnings.length ? ` (${warnings.length} warning(s))` : ""}.`);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main()
-    .then((code) => process.exit(code))
-    .catch((e) => {
-      console.error(e);
-      process.exit(1);
-    });
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
+  main().catch((e) => {
+    console.error(`✗  ${e.message}`);
+    process.exit(1);
+  });
 }

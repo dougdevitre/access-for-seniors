@@ -1,5 +1,5 @@
 {
-  "$comment": "Fact ledger: every phone number, dollar figure, deadline and program-status claim this skill states, with the primary source it was verified on, the date, and the files that carry it. scripts/check-facts.mjs fails CI when a fact is past its recheck date, a listed file is missing, or the value no longer appears in any listed file. Only add an entry you verified on its source that day; never back-date.",
+  "$comment": "Fact ledger: every phone number, dollar figure, deadline and program-status claim this skill states, with the primary source it was verified on, the date, and the files that carry it. scripts/check-facts.mjs fails CI when a fact is past its recheck date, a listed file is missing, or the value (or each string in match) no longer appears in its listed files. Recheck intervals: phone numbers 180 days; dollar figures and program status 90; annual-cycle figures use recheck_on with the next cycle's date. Only add an entry you verified on its source that day; never back-date.",
   "recheck_days_default": 90,
   "facts": [
     {
@@ -7,7 +7,7 @@
       "claim": "Eldercare Locator phone number",
       "value": "1-800-677-1116",
       "source": "https://eldercare.acl.gov/Public/About/Contact_Info/Index.aspx",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "docs/glossary.md",
@@ -21,7 +21,7 @@
       "claim": "Eldercare Locator hours: Monday–Friday, 8 a.m. to 9 p.m. ET",
       "value": "8am–9pm ET",
       "source": "https://eldercare.acl.gov/Public/About/Contact_Info/Index.aspx",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "references/aging-services.md"
@@ -32,7 +32,7 @@
       "claim": "Eldercare Locator hours as spoken by the companion: Monday to Friday, 8am to 9pm Eastern",
       "value": "8am to 9pm Eastern",
       "source": "https://eldercare.acl.gov/Public/About/Contact_Info/Index.aspx",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "references/conversation-engine.md"
@@ -43,7 +43,7 @@
       "claim": "Senior Medicare Patrol nationwide toll-free number",
       "value": "1-877-808-2468",
       "source": "https://smpresource.org/smp-resource-center/",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "references/aging-services.md"
@@ -54,7 +54,7 @@
       "claim": "988 Suicide & Crisis Lifeline: call or text 988, 24/7",
       "value": "988",
       "source": "https://988lifeline.org/",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "DISCLAIMER.md",
@@ -75,7 +75,7 @@
       "claim": "988 in Spanish: press 2 on a call, or text AYUDA to 988",
       "value": "AYUDA",
       "source": "https://988lifeline.org/get-help/what-to-expect/",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "SKILL.md",
@@ -88,7 +88,7 @@
       "claim": "Missouri Adult Abuse and Neglect Hotline, 7 days a week 7:00 a.m. to 8:00 p.m.; online reporting any time",
       "value": "1-800-392-0210",
       "source": "https://health.mo.gov/report-adult-abuse/stop-adult-abuse",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "references/aging-services.md",
@@ -101,7 +101,7 @@
       "claim": "Missouri SHIP (State Health Insurance Assistance Program) toll-free number",
       "value": "1-800-390-3330",
       "source": "https://www.cms.gov/contacts/missouri-ship/general-beneficiary-contact/1562121",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 180,
       "files": [
         "references/aging-services.md"
@@ -112,8 +112,8 @@
       "claim": "2026 Medicare Part B standard monthly premium $202.90 (2027 figures take effect 2027-01-01; recheck when CMS publishes them)",
       "value": "$202.90",
       "source": "https://www.cms.gov/newsroom/fact-sheets/2026-medicare-parts-b-premiums-deductibles",
-      "verified_on": "2026-10-23",
-      "recheck_days": 70,
+      "verified_on": "2026-10-24",
+      "recheck_on": "2027-01-01",
       "files": [
         "references/aging-services.md"
       ]
@@ -123,8 +123,8 @@
       "claim": "2026 Medicare Part B annual deductible $283 (recheck for 2027, due 2027-01-01)",
       "value": "$283",
       "source": "https://www.cms.gov/newsroom/fact-sheets/2026-medicare-parts-b-premiums-deductibles",
-      "verified_on": "2026-10-23",
-      "recheck_days": 70,
+      "verified_on": "2026-10-24",
+      "recheck_on": "2027-01-01",
       "files": [
         "references/aging-services.md"
       ]
@@ -134,8 +134,8 @@
       "claim": "2026 Medicare Part A inpatient hospital deductible $1,736 per benefit period (recheck for 2027, due 2027-01-01)",
       "value": "$1,736",
       "source": "https://www.cms.gov/newsroom/fact-sheets/2026-medicare-parts-b-premiums-deductibles",
-      "verified_on": "2026-10-23",
-      "recheck_days": 70,
+      "verified_on": "2026-10-24",
+      "recheck_on": "2027-01-01",
       "files": [
         "references/aging-services.md"
       ]
@@ -145,7 +145,7 @@
       "claim": "Medicare Initial Enrollment Period lasts 7 months: 3 months before the month you turn 65, that month, and 3 months after",
       "value": "7-month",
       "source": "https://www.medicare.gov/basics/get-started-with-medicare/sign-up/when-does-medicare-coverage-start",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 365,
       "files": [
         "references/aging-services.md"
@@ -156,7 +156,7 @@
       "claim": "Medicare General Enrollment Period and Medicare Advantage Open Enrollment Period both run January 1 – March 31 (MA OEP: one change, to another MA plan or back to Original Medicare)",
       "value": "Jan 1 – Mar 31",
       "source": "https://www.cms.gov/files/document/understanding-map-part-d-enrollment-periods.pdf",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 365,
       "files": [
         "references/aging-services.md"
@@ -167,7 +167,7 @@
       "claim": "Medicare Open Enrollment Period (AEP) October 15 – December 7; changes take effect January 1",
       "value": "Oct 15 – Dec 7",
       "source": "https://www.cms.gov/files/document/understanding-map-part-d-enrollment-periods.pdf",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 365,
       "files": [
         "docs/glossary.md",
@@ -179,7 +179,7 @@
       "claim": "AWS ends support for Amazon Pinpoint on October 30, 2026; new SMS/voice work uses AWS End User Messaging",
       "value": "2026-10-30",
       "source": "https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html",
-      "verified_on": "2026-10-23",
+      "verified_on": "2026-10-24",
       "recheck_days": 90,
       "files": [
         "SKILL.md",
