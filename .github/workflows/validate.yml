@@ -21,6 +21,20 @@ jobs:
       - name: Build skill package
         run: bash scripts/build-skill.sh --skip-validate
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Unit tests for the ledger check
+        run: node --test scripts/test/check-facts.test.mjs
+
+      # facts/ledger.json records every verified phone number, dollar figure,
+      # deadline and program-status claim with its primary source and date.
+      # Fails when a fact is past its recheck date, a listed file is missing,
+      # or the value no longer appears in any listed file.
+      - name: Check the fact ledger
+        run: node scripts/check-facts.mjs
+
       - name: Upload skill artifact
         uses: actions/upload-artifact@v4
         with:
